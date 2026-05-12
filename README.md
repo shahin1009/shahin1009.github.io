@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -28,20 +29,10 @@
             line-height: 1.6;
         }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+        a { text-decoration: none; color: inherit; }
 
-        /* --- NAVIGATION & HERO (Unchanged for layout consistency) --- */
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 2rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /* --- NAVIGATION & HERO --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
         .nav-links a { margin-left: 2rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s ease; }
         .nav-links a:hover { color: var(--accent-color); }
@@ -50,34 +41,30 @@
         .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
 
-        /* --- UPGRADED PROJECTS GALLERY --- */
+        /* --- PROJECTS GALLERY --- */
         .projects-section {
             max-width: 1200px;
             margin: 0 auto 6rem auto;
             padding: 0 5%;
         }
 
-        .section-title {
-            font-size: 2rem;
-            margin-bottom: 3rem;
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 1rem;
-        }
+        .section-title { font-size: 2rem; margin-bottom: 3rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; }
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 2.5rem;
+            /* Increased card size to accommodate the collage beautifully */
+            grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+            gap: 3rem;
         }
 
         /* Card Container */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px; /* Slightly softer corners */
+            border-radius: 16px;
             overflow: hidden;
             display: flex;
-            flex-direction: column; /* Allows content to stretch */
+            flex-direction: column;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
@@ -86,123 +73,78 @@
             box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
         }
 
-        /* NEW: Swipeable Image Gallery */
-        .card-gallery {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scroll-behavior: smooth;
-            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        /* --- NEW: MEDIA COLLAGE & SINGLE LAYOUTS --- */
+        
+        /* Base media container */
+        .card-media {
+            display: grid;
+            gap: 2px; /* Creates a clean 2px gap between collage images */
+            background-color: #f0f0f0; /* Color of the gap lines */
+        }
+
+        .card-media img {
             width: 100%;
-            height: 240px;
-            background-color: #f8f9fa;
-        }
-
-        /* Elegant custom scrollbar for the gallery to hint at more images */
-        .card-gallery::-webkit-scrollbar {
-            height: 6px;
-        }
-        .card-gallery::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .card-gallery::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        .card-gallery:hover::-webkit-scrollbar-thumb {
-            background: #94a3b8; /* Darkens slightly on hover */
-        }
-
-        .card-gallery img {
-            flex: 0 0 100%; /* Forces each image to take up exactly 100% of the card width */
             height: 100%;
             object-fit: cover;
-            scroll-snap-align: start; /* Snaps perfectly to the next image */
+            transition: transform 0.5s ease;
         }
 
-        /* Card Content Area */
-        .card-content {
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-grow: 1; /* Pushes the buttons to the bottom */
+        /* Slight zoom effect on hover for all images */
+        .card:hover .card-media img {
+            transform: scale(1.03);
         }
 
-        .card-title { font-size: 1.35rem; margin-bottom: 0.5rem; font-weight: 700;}
-        .card-desc { color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; }
+        /* 1. Collage Layout: 1 Top, 2 Bottom */
+        .media-collage {
+            grid-template-columns: 1fr 1fr; /* Two columns for the bottom row */
+            grid-template-rows: 260px 160px; /* Top row height, Bottom row height */
+        }
+
+        /* The first image (GIF) spans all the way across */
+        .media-collage img:first-child {
+            grid-column: 1 / -1; 
+        }
+
+        /* 2. Single Image Layout */
+        .media-single {
+            grid-template-columns: 1fr;
+            grid-template-rows: 320px; /* Generous height for a single banner image */
+        }
+
+        /* Prevent the hover scale from overflowing the grid cells */
+        .img-wrapper {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+        .media-collage .img-wrapper:first-child { grid-column: 1 / -1; }
+
+        /* --- CARD CONTENT & BUTTONS --- */
+        .card-content { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
+        .card-title { font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700;}
+        .card-desc { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; }
         
-        .card-tags {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .tag {
-            background-color: #f1f5f9;
-            color: #475569;
-            font-size: 0.8rem;
-            padding: 0.35rem 0.85rem;
-            border-radius: 20px;
-            font-weight: 600;
-        }
+        .card-tags { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+        .tag { background-color: #f1f5f9; color: #475569; font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 600; }
 
-        /* NEW: Better Clickables (Action Buttons) */
-        .card-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: auto; /* Aligns buttons to the bottom of the card */
-            flex-wrap: wrap;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.7rem 1.25rem;
-            font-size: 0.95rem;
-            font-weight: 600;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        /* Primary Button (e.g., Live Demo) */
-        .action-btn.primary {
-            background-color: var(--accent-color);
-            color: #ffffff;
-        }
-        .action-btn.primary:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-        }
-
-        /* Secondary Button (e.g., GitHub Repo) */
-        .action-btn.secondary {
-            background-color: #f1f5f9;
-            color: var(--text-main);
-            border: 1px solid #e2e8f0;
-        }
-        .action-btn.secondary:hover {
-            background-color: #e2e8f0;
-            transform: translateY(-2px);
-        }
-
-        /* SVG Arrow Animation inside buttons */
-        .action-btn svg {
-            width: 18px;
-            height: 18px;
-            margin-left: 6px;
-            transition: transform 0.2s ease;
-        }
-        .action-btn:hover svg {
-            transform: translateX(4px); /* Pushes the arrow to the right on hover */
-        }
+        .card-actions { display: flex; gap: 1rem; margin-top: auto; flex-wrap: wrap; }
+        
+        .action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 600; border-radius: 8px; transition: all 0.2s ease; }
+        .action-btn.primary { background-color: var(--accent-color); color: #ffffff; }
+        .action-btn.primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+        .action-btn.secondary { background-color: #f1f5f9; color: var(--text-main); border: 1px solid #e2e8f0; }
+        .action-btn.secondary:hover { background-color: #e2e8f0; transform: translateY(-2px); }
+        
+        .action-btn svg { width: 18px; height: 18px; margin-left: 6px; transition: transform 0.2s ease; }
+        .action-btn:hover svg { transform: translateX(4px); }
 
         /* --- FOOTER & RESPONSIVE --- */
         footer { text-align: center; padding: 3rem 5%; border-top: 1px solid var(--border-color); color: var(--text-muted); }
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
+            .grid { grid-template-columns: 1fr; } /* Stack cards on mobile */
+            .media-collage { grid-template-rows: 200px 120px; } /* Slightly smaller collage on mobile */
         }
     </style>
 </head>
@@ -230,19 +172,27 @@
         
         <div class="grid">
             
-            <!-- Project Card 1 (Showcasing 3 Images/GIFs) -->
+            <!-- PROJECT 1: COLLAGE LAYOUT (3 Images) -->
             <div class="card">
-                <div class="card-gallery">
-                    <!-- Image 1 -->
-                    <img src="https://via.placeholder.com/800x600.png?text=Preview+1" alt="Preview 1">
-                    <!-- Image 2 -->
-                    <img src="https://via.placeholder.com/800x600.png?text=Preview+2" alt="Preview 2">
-                    <!-- Image 3 -->
-                    <img src="https://via.placeholder.com/800x600.png?text=GIF+Demo" alt="GIF Demo">
+                <!-- Notice the 'media-collage' class -->
+                <div class="card-media media-collage">
+                    <!-- Top Image / GIF (Spans full width) -->
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/800x400.png?text=Main+Project+GIF" alt="Main GIF">
+                    </div>
+                    <!-- Bottom Left Image -->
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/400x300.png?text=Detail+1" alt="Detail 1">
+                    </div>
+                    <!-- Bottom Right Image -->
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/400x300.png?text=Detail+2" alt="Detail 2">
+                    </div>
                 </div>
+                
                 <div class="card-content">
                     <h3 class="card-title">E-Commerce Dashboard</h3>
-                    <p class="card-desc">A full-stack analytics dashboard built for tracking online store metrics in real-time. Try swiping the images above!</p>
+                    <p class="card-desc">A full-stack analytics dashboard built for tracking online store metrics in real-time. Features interactive charts and a dynamic dark mode interface.</p>
                     <div class="card-tags">
                         <span class="tag">React</span>
                         <span class="tag">Node.js</span>
@@ -257,15 +207,18 @@
                 </div>
             </div>
 
-            <!-- Project Card 2 (Showcasing 2 Images) -->
+            <!-- PROJECT 2: SINGLE IMAGE LAYOUT (1 Image) -->
             <div class="card">
-                <div class="card-gallery">
-                    <img src="https://via.placeholder.com/800x600.png?text=App+Screenshot+1" alt="App Preview 1">
-                    <img src="https://via.placeholder.com/800x600.png?text=App+Screenshot+2" alt="App Preview 2">
+                <!-- Notice the 'media-single' class -->
+                <div class="card-media media-single">
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/800x500.png?text=Single+Project+Banner" alt="Project Banner">
+                    </div>
                 </div>
+                
                 <div class="card-content">
                     <h3 class="card-title">Weather Companion App</h3>
-                    <p class="card-desc">A location-based weather application utilizing external REST APIs to provide accurate 7-day forecasting with animated UI elements.</p>
+                    <p class="card-desc">A location-based weather application utilizing external REST APIs to provide accurate 7-day forecasting with beautifully animated UI elements.</p>
                     <div class="card-tags">
                         <span class="tag">JavaScript</span>
                         <span class="tag">API</span>
@@ -280,17 +233,26 @@
                 </div>
             </div>
 
-            <!-- Project Card 3 (Showcasing 1 Image) -->
+            <!-- PROJECT 3: COLLAGE LAYOUT AGAIN -->
             <div class="card">
-                <div class="card-gallery">
-                    <img src="https://via.placeholder.com/800x600.png?text=Single+Showcase+Image" alt="Template Preview">
+                <div class="card-media media-collage">
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/800x400.png?text=App+Demo+GIF" alt="App GIF">
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/400x300.png?text=Mobile+View" alt="Mobile">
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="https://via.placeholder.com/400x300.png?text=Tablet+View" alt="Tablet">
+                    </div>
                 </div>
+                
                 <div class="card-content">
-                    <h3 class="card-title">Portfolio Template</h3>
-                    <p class="card-desc">A minimalist, highly customizable portfolio template designed specifically for GitHub Pages deployment. Features pure CSS image sliders.</p>
+                    <h3 class="card-title">Task Management Tool</h3>
+                    <p class="card-desc">A Kanban-style project management tool with drag-and-drop functionality, real-time sync, and team collaboration features.</p>
                     <div class="card-tags">
-                        <span class="tag">HTML5</span>
-                        <span class="tag">CSS3</span>
+                        <span class="tag">Vue.js</span>
+                        <span class="tag">Firebase</span>
                     </div>
                     <div class="card-actions">
                         <a href="#" class="action-btn secondary">Read Case Study</a>
