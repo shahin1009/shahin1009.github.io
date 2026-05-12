@@ -178,15 +178,15 @@
                 <div class="card-media media-collage">
                     <!-- Top Image / GIF (Spans full width) -->
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/800x400.png?text=Main+Project+GIF" alt="Main GIF">
+                        <img src="assets/Images/quadruped_walk.gif" alt="Main GIF">
                     </div>
                     <!-- Bottom Left Image -->
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/400x300.png?text=Detail+1" alt="Detail 1">
+                        <img src="assets/Images/quadruped_walk_trot.gif" alt="Detail 1">
                     </div>
                     <!-- Bottom Right Image -->
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/400x300.png?text=Detail+2" alt="Detail 2">
+                        <img src="assets/Images/quadruped_running.gif" alt="Detail 2">
                     </div>
                 </div>
                 
