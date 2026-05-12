@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -11,6 +10,7 @@
             --text-main: #1a1a1a;
             --text-muted: #666666;
             --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
             --card-bg: #ffffff;
             --border-color: #e5e5e5;
         }
@@ -33,7 +33,7 @@
             color: inherit;
         }
 
-        /* --- NAVIGATION --- */
+        /* --- NAVIGATION & HERO (Unchanged for layout consistency) --- */
         nav {
             display: flex;
             justify-content: space-between;
@@ -42,62 +42,15 @@
             max-width: 1200px;
             margin: 0 auto;
         }
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+        .nav-links a { margin-left: 2rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s ease; }
+        .nav-links a:hover { color: var(--accent-color); }
+        
+        .hero { max-width: 1200px; margin: 6rem auto; padding: 0 5%; text-align: left; }
+        .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-        }
-
-        .nav-links a {
-            margin-left: 2rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-color);
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            max-width: 1200px;
-            margin: 6rem auto;
-            padding: 0 5%;
-            text-align: left;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--text-main);
-            color: #fff;
-            padding: 0.8rem 1.5rem;
-            border-radius: 6px;
-            font-weight: 600;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .btn:hover {
-            background-color: var(--accent-color);
-            transform: translateY(-2px);
-        }
-
-        /* --- PROJECTS GALLERY --- */
+        /* --- UPGRADED PROJECTS GALLERY --- */
         .projects-section {
             max-width: 1200px;
             margin: 0 auto 6rem auto;
@@ -113,96 +66,143 @@
 
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
             gap: 2.5rem;
         }
 
+        /* Card Container */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 16px; /* Slightly softer corners */
             overflow: hidden;
+            display: flex;
+            flex-direction: column; /* Allows content to stretch */
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+            transform: translateY(-6px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
         }
 
-        /* Set a fixed aspect ratio for images/gifs */
-        .card-img-wrapper {
+        /* NEW: Swipeable Image Gallery */
+        .card-gallery {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
             width: 100%;
-            height: 220px;
-            overflow: hidden;
-            background-color: #f0f0f0; /* Placeholder color */
+            height: 240px;
+            background-color: #f8f9fa;
         }
 
-        .card-img-wrapper img {
-            width: 100%;
+        /* Elegant custom scrollbar for the gallery to hint at more images */
+        .card-gallery::-webkit-scrollbar {
+            height: 6px;
+        }
+        .card-gallery::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .card-gallery::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .card-gallery:hover::-webkit-scrollbar-thumb {
+            background: #94a3b8; /* Darkens slightly on hover */
+        }
+
+        .card-gallery img {
+            flex: 0 0 100%; /* Forces each image to take up exactly 100% of the card width */
             height: 100%;
-            object-fit: cover; /* Ensures images/GIFs fill the space without stretching */
-            transition: transform 0.5s ease;
+            object-fit: cover;
+            scroll-snap-align: start; /* Snaps perfectly to the next image */
         }
 
-        .card:hover .card-img-wrapper img {
-            transform: scale(1.05); /* Slight zoom effect on hover */
-        }
-
+        /* Card Content Area */
         .card-content {
             padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1; /* Pushes the buttons to the bottom */
         }
 
-        .card-title {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-desc {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-            margin-bottom: 1.5rem;
-        }
-
+        .card-title { font-size: 1.35rem; margin-bottom: 0.5rem; font-weight: 700;}
+        .card-desc { color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem; }
+        
         .card-tags {
             display: flex;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             flex-wrap: wrap;
         }
-
         .tag {
             background-color: #f1f5f9;
             color: #475569;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            padding: 0.35rem 0.85rem;
             border-radius: 20px;
             font-weight: 600;
         }
 
-        .card-links a {
-            font-size: 0.9rem;
+        /* NEW: Better Clickables (Action Buttons) */
+        .card-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: auto; /* Aligns buttons to the bottom of the card */
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.7rem 1.25rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            color: var(--accent-color);
-            margin-right: 1rem;
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
 
-        .card-links a:hover {
-            text-decoration: underline;
+        /* Primary Button (e.g., Live Demo) */
+        .action-btn.primary {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+        .action-btn.primary:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
         }
 
-        /* --- FOOTER --- */
-        footer {
-            text-align: center;
-            padding: 3rem 5%;
-            border-top: 1px solid var(--border-color);
-            color: var(--text-muted);
+        /* Secondary Button (e.g., GitHub Repo) */
+        .action-btn.secondary {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+            border: 1px solid #e2e8f0;
+        }
+        .action-btn.secondary:hover {
+            background-color: #e2e8f0;
+            transform: translateY(-2px);
         }
 
-        /* --- RESPONSIVE DESIGN --- */
+        /* SVG Arrow Animation inside buttons */
+        .action-btn svg {
+            width: 18px;
+            height: 18px;
+            margin-left: 6px;
+            transition: transform 0.2s ease;
+        }
+        .action-btn:hover svg {
+            transform: translateX(4px); /* Pushes the arrow to the right on hover */
+        }
+
+        /* --- FOOTER & RESPONSIVE --- */
+        footer { text-align: center; padding: 3rem 5%; border-top: 1px solid var(--border-color); color: var(--text-muted); }
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
-            .nav-links { display: none; } /* Simple mobile approach: hide links, keep logo */
+            .nav-links { display: none; }
         }
     </style>
 </head>
@@ -222,7 +222,6 @@
     <header class="hero" id="about">
         <h1>Hi, I'm Jane. <br>I build digital experiences.</h1>
         <p>I am a software developer and designer specializing in creating clean, user-friendly, and performant applications. Here is a showcase of my recent work.</p>
-        <a href="#projects" class="btn">View My Work</a>
     </header>
 
     <!-- Projects Section -->
@@ -231,62 +230,70 @@
         
         <div class="grid">
             
-            <!-- Project Card 1 (Example with a GIF) -->
+            <!-- Project Card 1 (Showcasing 3 Images/GIFs) -->
             <div class="card">
-                <div class="card-img-wrapper">
-                    <!-- Replace with your own GIF or Image path -->
-                    <img src="https://via.placeholder.com/600x400.png?text=Your+Project+GIF+Here" alt="Project 1 Demo">
+                <div class="card-gallery">
+                    <!-- Image 1 -->
+                    <img src="https://via.placeholder.com/800x600.png?text=Preview+1" alt="Preview 1">
+                    <!-- Image 2 -->
+                    <img src="https://via.placeholder.com/800x600.png?text=Preview+2" alt="Preview 2">
+                    <!-- Image 3 -->
+                    <img src="https://via.placeholder.com/800x600.png?text=GIF+Demo" alt="GIF Demo">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">E-Commerce Dashboard</h3>
-                    <p class="card-desc">A full-stack analytics dashboard built for tracking online store metrics in real-time. Features interactive charts and a dark mode.</p>
+                    <p class="card-desc">A full-stack analytics dashboard built for tracking online store metrics in real-time. Try swiping the images above!</p>
                     <div class="card-tags">
                         <span class="tag">React</span>
                         <span class="tag">Node.js</span>
-                        <span class="tag">Chart.js</span>
                     </div>
-                    <div class="card-links">
-                        <a href="#">Live Demo &rarr;</a>
-                        <a href="#">GitHub Repo</a>
+                    <div class="card-actions">
+                        <a href="#" class="action-btn primary">
+                            Live Demo 
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="#" class="action-btn secondary">GitHub</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Project Card 2 -->
+            <!-- Project Card 2 (Showcasing 2 Images) -->
             <div class="card">
-                <div class="card-img-wrapper">
-                    <img src="https://via.placeholder.com/600x400.png?text=Your+Image+Here" alt="Project 2 Preview">
+                <div class="card-gallery">
+                    <img src="https://via.placeholder.com/800x600.png?text=App+Screenshot+1" alt="App Preview 1">
+                    <img src="https://via.placeholder.com/800x600.png?text=App+Screenshot+2" alt="App Preview 2">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Weather Companion App</h3>
                     <p class="card-desc">A location-based weather application utilizing external REST APIs to provide accurate 7-day forecasting with animated UI elements.</p>
                     <div class="card-tags">
                         <span class="tag">JavaScript</span>
-                        <span class="tag">CSS Animations</span>
                         <span class="tag">API</span>
                     </div>
-                    <div class="card-links">
-                        <a href="#">Live Demo &rarr;</a>
-                        <a href="#">GitHub Repo</a>
+                    <div class="card-actions">
+                        <a href="#" class="action-btn primary">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="#" class="action-btn secondary">Source Code</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Project Card 3 -->
+            <!-- Project Card 3 (Showcasing 1 Image) -->
             <div class="card">
-                <div class="card-img-wrapper">
-                    <img src="https://via.placeholder.com/600x400.png?text=Your+GIF+Here" alt="Project 3 Preview">
+                <div class="card-gallery">
+                    <img src="https://via.placeholder.com/800x600.png?text=Single+Showcase+Image" alt="Template Preview">
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Portfolio Template</h3>
-                    <p class="card-desc">A minimalist, highly customizable portfolio template designed specifically for GitHub Pages deployment without any build tools.</p>
+                    <p class="card-desc">A minimalist, highly customizable portfolio template designed specifically for GitHub Pages deployment. Features pure CSS image sliders.</p>
                     <div class="card-tags">
                         <span class="tag">HTML5</span>
-                        <span class="tag">CSS Grid</span>
+                        <span class="tag">CSS3</span>
                     </div>
-                    <div class="card-links">
-                        <a href="#">Live Demo &rarr;</a>
-                        <a href="#">GitHub Repo</a>
+                    <div class="card-actions">
+                        <a href="#" class="action-btn secondary">Read Case Study</a>
                     </div>
                 </div>
             </div>
@@ -297,11 +304,6 @@
     <!-- Footer Section -->
     <footer id="contact">
         <p>&copy; 2026 Jane Doe. Built with HTML & CSS.</p>
-        <p style="margin-top: 0.5rem;">
-            <a href="#" style="color: var(--accent-color); margin: 0 0.5rem;">GitHub</a> | 
-            <a href="#" style="color: var(--accent-color); margin: 0 0.5rem;">LinkedIn</a> | 
-            <a href="#" style="color: var(--accent-color); margin: 0 0.5rem;">Email</a>
-        </p>
     </footer>
 
 </body>
