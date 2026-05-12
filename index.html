@@ -52,7 +52,6 @@
 
         .grid {
             display: grid;
-            /* Increased card size to accommodate the collage beautifully */
             grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
             gap: 3rem;
         }
@@ -73,13 +72,13 @@
             box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
         }
 
-        /* --- NEW: MEDIA COLLAGE & SINGLE LAYOUTS --- */
+        /* --- MEDIA COLLAGE & SINGLE LAYOUTS --- */
         
         /* Base media container */
         .card-media {
             display: grid;
-            gap: 2px; /* Creates a clean 2px gap between collage images */
-            background-color: #f0f0f0; /* Color of the gap lines */
+            gap: 2px;
+            background-color: #f0f0f0; 
         }
 
         .card-media img {
@@ -89,35 +88,79 @@
             transition: transform 0.5s ease;
         }
 
-        /* Slight zoom effect on hover for all images */
-        .card:hover .card-media img {
-            transform: scale(1.03);
-        }
-
-        /* 1. Collage Layout: 1 Top, 2 Bottom */
-        .media-collage {
-            grid-template-columns: 1fr 1fr; /* Two columns for the bottom row */
-            grid-template-rows: 260px 160px; /* Top row height, Bottom row height */
-        }
-
-        /* The first image (GIF) spans all the way across */
-        .media-collage img:first-child {
-            grid-column: 1 / -1; 
-        }
-
-        /* 2. Single Image Layout */
-        .media-single {
-            grid-template-columns: 1fr;
-            grid-template-rows: 320px; /* Generous height for a single banner image */
-        }
-
         /* Prevent the hover scale from overflowing the grid cells */
         .img-wrapper {
             overflow: hidden;
             width: 100%;
             height: 100%;
+            position: relative; /* Needed for absolute positioning inside */
+        }
+
+        /* Hover zoom effect ONLY for non-scrolling layouts to prevent GIF/Scroll jank */
+        .card:hover .media-collage img,
+        .card:hover .media-single img {
+            transform: scale(1.03);
+        }
+
+        /* 1. Collage Layout */
+        .media-collage {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 260px 160px; 
         }
         .media-collage .img-wrapper:first-child { grid-column: 1 / -1; }
+
+        /* 2. Single Layout */
+        .media-single {
+            grid-template-columns: 1fr;
+            grid-template-rows: 320px;
+        }
+
+        /* --- FIXED: SCROLLING CAROUSEL LAYOUT --- */
+        .media-scroller {
+            display: flex;
+            gap: 0; /* CRITICAL FIX: Removed the 2px gap so 100% width math works perfectly */
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            height: 420px; 
+        }
+
+        /* Custom Scrollbar for Desktop Accessibility */
+        .media-scroller::-webkit-scrollbar {
+            height: 6px;
+        }
+        .media-scroller::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .media-scroller::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .media-scroller::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .media-scroller .img-wrapper {
+            flex: 0 0 100%;
+            min-width: 100%; /* CRITICAL FIX: Forces each slide to be exactly the card width */
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            z-index: 10;
+        }
 
         /* --- CARD CONTENT & BUTTONS --- */
         .card-content { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
@@ -143,8 +186,9 @@
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.5rem; }
             .nav-links { display: none; }
-            .grid { grid-template-columns: 1fr; } /* Stack cards on mobile */
-            .media-collage { grid-template-rows: 200px 120px; } /* Slightly smaller collage on mobile */
+            .grid { grid-template-columns: 1fr; } 
+            .media-collage { grid-template-rows: 200px 120px; } 
+            .media-scroller { height: 320px; } /* Scales down nicely on mobile */
         }
     </style>
 </head>
@@ -172,34 +216,30 @@
         
         <div class="grid">
             
-            <!-- PROJECT 1: COLLAGE LAYOUT (3 Images) -->
+            <!-- PROJECT 1: COLLAGE LAYOUT -->
             <div class="card">
-                <!-- Notice the 'media-collage' class -->
                 <div class="card-media media-collage">
-                    <!-- Top Image / GIF (Spans full width) -->
                     <div class="img-wrapper">
-                        <img src="assets/Images/quadruped_walk.gif" alt="Main GIF">
+                        <img src="assets/Images/UnitreeA1RL/quadruped_walk.gif" alt="Main GIF">
                     </div>
-                    <!-- Bottom Left Image -->
                     <div class="img-wrapper">
-                        <img src="assets/Images/quadruped_walk_trot.gif" alt="Detail 1">
+                        <img src="assets/Images/UnitreeA1RL/quadruped_walk_trot.gif" alt="Detail 1">
                     </div>
-                    <!-- Bottom Right Image -->
                     <div class="img-wrapper">
-                        <img src="assets/Images/quadruped_running.gif" alt="Detail 2">
+                        <img src="assets/Images/UnitreeA1RL/quadruped_running.gif" alt="Detail 2">
                     </div>
                 </div>
                 
                 <div class="card-content">
-                    <h3 class="card-title">E-Commerce Dashboard</h3>
-                    <p class="card-desc">A full-stack analytics dashboard built for tracking online store metrics in real-time. Features interactive charts and a dynamic dark mode interface.</p>
+                    <h3 class="card-title">Quadruped Locomotion</h3>
+                    <p class="card-desc">Simulated reinforcement learning environments for robotic quadruped movement, demonstrating walk, trot, and running gaits.</p>
                     <div class="card-tags">
-                        <span class="tag">React</span>
-                        <span class="tag">Node.js</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">PyTorch</span>
                     </div>
                     <div class="card-actions">
                         <a href="#" class="action-btn primary">
-                            Live Demo 
+                            View Project
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                         <a href="#" class="action-btn secondary">GitHub</a>
@@ -207,55 +247,63 @@
                 </div>
             </div>
 
-            <!-- PROJECT 2: SINGLE IMAGE LAYOUT (1 Image) -->
+            <!-- PROJECT 2: COLLAGE LAYOUT -->
             <div class="card">
-                <!-- Notice the 'media-single' class -->
-                <div class="card-media media-single">
+                <div class="card-media media-collage">
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/800x500.png?text=Single+Project+Banner" alt="Project Banner">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes3.PNG" alt="Regulation Box 3">
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes5.PNG" alt="Regulation Box 5">
+                    </div>
+                    <div class="img-wrapper">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes6.PNG" alt="Regulation Box 6">
                     </div>
                 </div>
                 
                 <div class="card-content">
-                    <h3 class="card-title">Weather Companion App</h3>
-                    <p class="card-desc">A location-based weather application utilizing external REST APIs to provide accurate 7-day forecasting with beautifully animated UI elements.</p>
+                    <h3 class="card-title">F1 Regulation Volumes</h3>
+                    <p class="card-desc">3D CAD modeling and analysis of Formula 1 regulation bounding boxes, ensuring aerodynamic compliance for the current era of cars.</p>
                     <div class="card-tags">
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">API</span>
+                        <span class="tag">SolidWorks</span>
+                        <span class="tag">CAD</span>
                     </div>
                     <div class="card-actions">
                         <a href="#" class="action-btn primary">
-                            View Project
+                            View Details 
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="#" class="action-btn secondary">Source Code</a>
                     </div>
                 </div>
             </div>
 
-            <!-- PROJECT 3: COLLAGE LAYOUT AGAIN -->
+            <!-- PROJECT 3: SCROLLER LAYOUT -->
             <div class="card">
-                <div class="card-media media-collage">
+                <div class="card-media media-scroller">
+                    <!-- Image 1 -->
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/800x400.png?text=App+Demo+GIF" alt="App GIF">
+                        <!-- Ensure this path is 100% correct. If this GIF is frozen, re-export it from your software -->
+                        <img src="assets/Images/ScaraDesign/Picture1.gif" alt="Before Design">
+                        <span class="scroll-hint">Swipe &rarr;</span>
                     </div>
+                    <!-- Image 2 -->
                     <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/400x300.png?text=Mobile+View" alt="Mobile">
-                    </div>
-                    <div class="img-wrapper">
-                        <img src="https://via.placeholder.com/400x300.png?text=Tablet+View" alt="Tablet">
+                        <img src="assets/Images/ScaraDesign/InverseKine_parabolaPause_CLOSEDLINK-ezgif.com-video-to-gif-converter.gif" alt="After Design">
                     </div>
                 </div>
                 
                 <div class="card-content">
-                    <h3 class="card-title">Task Management Tool</h3>
-                    <p class="card-desc">A Kanban-style project management tool with drag-and-drop functionality, real-time sync, and team collaboration features.</p>
+                    <h3 class="card-title">SCARA Robot Kinematics</h3>
+                    <p class="card-desc">Swipe to compare the initial mechanism design with the final inverse kinematics simulation tracking a parabolic path.</p>
                     <div class="card-tags">
-                        <span class="tag">Vue.js</span>
-                        <span class="tag">Firebase</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">Robotics</span>
                     </div>
                     <div class="card-actions">
-                        <a href="#" class="action-btn secondary">Read Case Study</a>
+                        <a href="#" class="action-btn primary">
+                            View Case Study
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
