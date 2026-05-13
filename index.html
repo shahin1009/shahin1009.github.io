@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Name | Portfolio</title>
+    <title>Mohsen Ghasemi | Portfolio</title>
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
-            --bg-color: #fcfcfc;
-            --text-main: #1a1a1a;
-            --text-muted: #666666;
-            --accent-color: #2563eb;
-            --accent-hover: #1d4ed8;
-            --card-bg: #ffffff;
-            --border-color: #e5e5e5;
+            --bg-color: #121212;       /* Very dark gray, almost black */
+            --card-bg: #1e1e1e;        /* Elevated dark gray for cards */
+            --text-main: #e0e0e0;      /* Soft white to prevent glaring contrast */
+            --text-muted: #a0a0a0;     /* Neutral medium-light gray */
+            --accent-color: #0ea5e9;   /* Vibrant sky blue */
+            --accent-hover: #38bdf8;   /* Lighter sky blue for hover */
+            --border-color: #2c2c2c;   /* Faint border to separate cards */
         }
 
         * {
@@ -187,8 +187,8 @@
         .action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 600; border-radius: 8px; transition: all 0.2s ease; }
         .action-btn.primary { background-color: var(--accent-color); color: #ffffff; }
         .action-btn.primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-        .action-btn.secondary { background-color: #f1f5f9; color: var(--text-main); border: 1px solid #e2e8f0; }
-        .action-btn.secondary:hover { background-color: #e2e8f0; transform: translateY(-2px); }
+        .action-btn.secondary { background-color: #050505; color: var(--text-main); border: 1px solid #e2e8f0; }
+        .action-btn.secondary:hover { background-color: #000000; transform: translateY(-2px); }
         
         .action-btn svg { width: 18px; height: 18px; margin-left: 6px; transition: transform 0.2s ease; }
         .action-btn:hover svg { transform: translateX(4px); }
@@ -208,7 +208,7 @@
 
     <!-- Navigation -->
     <nav>
-        <div class="logo">Mohsen Ghasemi.</div>
+        <div class="logo">Portfolio</div>
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Work</a>
@@ -335,7 +335,7 @@
                 
                 <div class="card-content">
                     <h3 class="card-title">Soft Actuator Design</h3>
-                    <p class="card-desc">Design and development of a soft hand with 3 fingers for picking delicate objects.</p>
+                    <p class="card-desc">Design and development of a soft hand gripper with 3 fingers for picking delicate objects. Two different grades of silicone were used for varying stiffness at the surface for higher friction and the back for more stiffness to have firmer grip.</p>
                     <div class="card-tags">
                         <span class="tag">Embedded Systems</span>
                         <span class="tag">3D Printing</span>
@@ -408,7 +408,7 @@
                             View Project
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="#" class="action-btn secondary">GitHub</a>
+                        <a href="https://github.com/shahin1009/LLMChess" class="action-btn secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
                     </div>
                 </div>
             </div>
