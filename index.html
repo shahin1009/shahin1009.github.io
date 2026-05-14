@@ -37,9 +37,36 @@
         .nav-links a { margin-left: 2rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s ease; }
         .nav-links a:hover { color: var(--accent-color); }
         
-        .hero { max-width: 1200px; margin: 6rem auto; padding: 0 5%; text-align: left; }
+        .hero { 
+            max-width: 1200px; 
+            margin: 6rem auto; 
+            padding: 0 5%; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4rem;
+        }
+        
+        .hero-text { flex: 1; }
         .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
+
+        /* --- PROFILE PICTURE --- */
+        .hero-image {
+            flex-shrink: 0;
+        }
+        .profile-pic {
+            width: 280px;
+            height: 280px;
+            border-radius: 50%; /* Makes the image perfectly circular */
+            object-fit: cover;  /* Crops the image without squishing/distorting it */
+            border: 4px solid var(--border-color);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+            transition: transform 0.3s ease;
+        }
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
 
         /* --- PROJECTS GALLERY --- */
         .projects-section {
@@ -93,7 +120,7 @@
             overflow: hidden;
             width: 100%;
             height: 100%;
-            position: relative; /* Needed for absolute positioning inside */
+            position: relative; 
         }
 
         /* Hover zoom effect ONLY for non-scrolling layouts to prevent GIF/Scroll jank */
@@ -130,7 +157,7 @@
         /* --- FIXED: SCROLLING CAROUSEL LAYOUT --- */
         .media-scroller {
             display: flex;
-            gap: 0; /* CRITICAL FIX: Removed the 2px gap so 100% width math works perfectly */
+            gap: 0; 
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
@@ -195,12 +222,23 @@
 
         /* --- FOOTER & RESPONSIVE --- */
         footer { text-align: center; padding: 3rem 5%; border-top: 1px solid var(--border-color); color: var(--text-muted); }
+        
         @media (max-width: 768px) {
+            .hero { 
+                flex-direction: column-reverse; /* Puts image on top on mobile */
+                text-align: center;
+                gap: 2.5rem;
+                margin: 4rem auto;
+            }
+            .hero-text { text-align: center; }
+            .hero p { margin: 0 auto 2rem auto; }
             .hero h1 { font-size: 2.5rem; }
+            .profile-pic { width: 220px; height: 220px; }
+            
             .nav-links { display: none; }
             .grid { grid-template-columns: 1fr; } 
             .media-collage { grid-template-rows: 200px 120px; } 
-            .media-scroller { height: 320px; } /* Scales down nicely on mobile */
+            .media-scroller { height: 320px; } 
         }
     </style>
 </head>
@@ -218,8 +256,14 @@
 
     <!-- Hero Section -->
     <header class="hero" id="about">
-        <h1>Hi, I'm Mohsen. <br>I am a mechanical engineer.</h1>
-        <p>I am passionate about designing and building innovative mechanical systems and solving complex engineering problems.</p>
+        <div class="hero-text">
+            <h1>Hi, I'm Mohsen. <br>I am a Mechanical Engineer.</h1>
+            <p>Passionate about designing and building innovative mechanical systems and solving complex engineering problems.</p>
+        </div>
+        <div class="hero-image">
+            <!-- REPLACE THE src="..." with the actual path to your photo -->
+            <img src="assets/Images/Siteimages/1401-06-28 18.22.36.jpg" alt="Mohsen Ghasemi" class="profile-pic">
+        </div>
     </header>
 
     <!-- Projects Section -->
@@ -341,13 +385,6 @@
                         <span class="tag">3D Printing</span>
                         <span class="tag">Control Systems</span>
                     </div>
-                    <!-- <div class="card-actions">
-                        <a href="#" class="action-btn primary">
-                            View Project
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
-                        <a href="#" class="action-btn secondary">GitHub</a>
-                    </div> -->
                 </div>
             </div>
 
@@ -374,12 +411,6 @@
                         <span class="tag">SolidWorks</span>
                         <span class="tag">CAD</span>
                     </div>
-                    <!-- <div class="card-actions">
-                        <a href="#" class="action-btn primary">
-                            View Details 
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                        </a>
-                    </div> -->
                 </div>
             </div>
 
@@ -388,7 +419,6 @@
             <div class="card">
                 <div class="card-media media-single2">
                     <div class="img-wrapper">
-                        <!-- <img src="assets/Images/Cliport/CLIPORT-Results-ezgif.com-video-to-gif-converter.gif" alt="Main GIF"> -->
                         <video src="assets/Images/Cliport/CLIPORT-Results.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
 
                     </div>
@@ -440,9 +470,6 @@
                     </div>
                 </div>
             </div>
-
-
-
 
         </div>
     </section>
