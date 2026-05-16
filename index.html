@@ -4,78 +4,259 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohsen Ghasemi | Portfolio</title>
+
+    <!-- SEO & Social sharing meta tags -->
+    <meta name="description" content="Portfolio of Mohsen Ghasemi — Mechanical Engineer specialising in robotics, control systems, and AI-driven motion.">
+    <meta property="og:title" content="Mohsen Ghasemi | Mechanical Engineer">
+    <meta property="og:description" content="Projects spanning quadruped locomotion, soft actuators, autonomous navigation, and more.">
+    <meta property="og:type" content="website">
+    <!-- Replace with a real preview image path when available -->
+    <meta property="og:image" content="assets/Images/Siteimages/1401-06-28 18.22.36.jpg">
+
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
-            --bg-color: #121212;       /* Very dark gray, almost black */
-            --card-bg: #1e1e1e;        /* Elevated dark gray for cards */
-            --text-main: #e0e0e0;      /* Soft white to prevent glaring contrast */
-            --text-muted: #a0a0a0;     /* Neutral medium-light gray */
-            --accent-color: #0ea5e9;   /* Vibrant sky blue */
-            --accent-hover: #38bdf8;   /* Lighter sky blue for hover */
-            --border-color: #2c2c2c;   /* Faint border to separate cards */
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         a { text-decoration: none; color: inherit; }
 
-        /* --- NAVIGATION & HERO --- */
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 2rem 5%; max-width: 1200px; margin: 0 auto; }
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+            max-width: 100%;
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
-        .nav-links a { margin-left: 2rem; font-weight: 500; color: var(--text-muted); transition: color 0.3s ease; }
+
+        .nav-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: 2rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
         .nav-links a:hover { color: var(--accent-color); }
-        
-        .hero { 
-            max-width: 1200px; 
-            margin: 6rem auto; 
-            padding: 0 5%; 
+        .nav-links a svg { flex-shrink: 0; }
+
+        /* Hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+            background: none;
+            border: none;
+        }
+        .hamburger span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text-main);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .hamburger.open span:nth-child(2) { opacity: 0; }
+        .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* Mobile drawer */
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 0;
+            position: absolute;
+            top: var(--nav-height);
+            left: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.97);
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(12px);
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease;
+        }
+        .mobile-menu.open { max-height: 300px; }
+        .mobile-menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 5%;
+            font-size: 1.05rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            transition: color 0.2s ease, background 0.2s ease;
+        }
+        .mobile-menu a:hover { color: var(--accent-color); background: rgba(14, 165, 233, 0.05); }
+
+        /* ─── HERO ───────────────────────────────────────────────── */
+        .hero {
+            max-width: 1200px;
+            margin: 6rem auto;
+            padding: 0 5%;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 4rem;
         }
-        
+
         .hero-text { flex: 1; }
         .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
         .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
 
-        /* --- PROFILE PICTURE --- */
-        .hero-image {
-            flex-shrink: 0;
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
+        .cta-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.85rem 1.6rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+        }
+        .cta-btn.primary {
+            background: var(--accent-color);
+            color: #fff;
+        }
+        .cta-btn.primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
+        }
+        .cta-btn.outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        .cta-btn.outline:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+        /* Profile picture */
+        .hero-image { flex-shrink: 0; }
         .profile-pic {
             width: 280px;
             height: 280px;
-            border-radius: 50%; /* Makes the image perfectly circular */
-            object-fit: cover;  /* Crops the image without squishing/distorting it */
+            border-radius: 50%;
+            object-fit: cover;
             border: 4px solid var(--border-color);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
             transition: transform 0.3s ease;
         }
-        .profile-pic:hover {
-            transform: scale(1.05);
-        }
+        .profile-pic:hover { transform: scale(1.05); }
 
-        /* --- PROJECTS GALLERY --- */
-        .projects-section {
+        /* ─── SKILLS SECTION ─────────────────────────────────────── */
+        .skills-section {
             max-width: 1200px;
             margin: 0 auto 6rem auto;
             padding: 0 5%;
         }
 
-        .section-title { font-size: 2rem; margin-bottom: 3rem; border-bottom: 2px solid var(--border-color); padding-bottom: 1rem; }
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .skill-group {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+        .skill-group:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
+
+        .skill-group-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-pill {
+            background: rgba(14, 165, 233, 0.1);
+            color: var(--text-main);
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        /* ─── PROJECTS SECTION ───────────────────────────────────── */
+        .projects-section {
+            max-width: 1200px;
+            margin: 0 auto 6rem auto;
+            padding: 0 5%;
+        }
 
         .grid {
             display: grid;
@@ -83,7 +264,6 @@
             gap: 3rem;
         }
 
-        /* Card Container */
         .card {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -93,95 +273,40 @@
             flex-direction: column;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .card:hover {
             transform: translateY(-6px);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
-        /* --- MEDIA COLLAGE & SINGLE LAYOUTS --- */
-        
-        /* Base media container */
-        .card-media {
-            display: grid;
-            gap: 2px;
-            background-color: #f0f0f0; 
-        }
+        /* Media layouts */
+        .card-media { display: grid; gap: 2px; background-color: #0a0a0a; }
+        .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .img-wrapper { overflow: hidden; width: 100%; height: 100%; position: relative; }
 
-        .card-media img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        /* Prevent the hover scale from overflowing the grid cells */
-        .img-wrapper {
-            overflow: hidden;
-            width: 100%;
-            height: 100%;
-            position: relative; 
-        }
-
-        /* Hover zoom effect ONLY for non-scrolling layouts to prevent GIF/Scroll jank */
         .card:hover .media-collage img,
-        .card:hover .media-single img {
-            transform: scale(1.03);
-        }
+        .card:hover .media-single img { transform: scale(1.03); }
 
-        /* 1. Collage Layout */
-        .media-collage {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 260px 160px; 
-        }
-
-        
+        .media-collage { grid-template-columns: 1fr 1fr; grid-template-rows: 260px 160px; }
         .media-collage .img-wrapper:first-child { grid-column: 1 / -1; }
 
-        /* 2. Single Layout */
-        .media-single {
-            grid-template-columns: 1fr;
-            grid-template-rows: 320px;
-        }
+        .media-single  { grid-template-columns: 1fr; grid-template-rows: 320px; }
+        .media-single2 { grid-template-columns: 1fr; grid-template-rows: 420px; }
+        .media-single3 { grid-template-columns: 1fr; grid-template-rows: 240px; }
 
-        .media-single2 {
-            grid-template-columns: 1fr;
-            grid-template-rows: 420px;
-        }
-
-        .media-single3 {
-            grid-template-columns: 1fr;
-            grid-template-rows: 240px;
-        }
-
-        /* --- FIXED: SCROLLING CAROUSEL LAYOUT --- */
         .media-scroller {
             display: flex;
-            gap: 0; 
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
-            height: 420px; 
+            height: 420px;
         }
-
-        /* Custom Scrollbar for Desktop Accessibility */
-        .media-scroller::-webkit-scrollbar {
-            height: 6px;
-        }
-        .media-scroller::-webkit-scrollbar-track {
-            background: #f1f5f9;
-        }
-        .media-scroller::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 10px;
-        }
-        .media-scroller::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
+        .media-scroller::-webkit-scrollbar { height: 6px; }
+        .media-scroller::-webkit-scrollbar-track { background: #1a1a1a; }
+        .media-scroller::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+        .media-scroller::-webkit-scrollbar-thumb:hover { background: #666; }
         .media-scroller .img-wrapper {
             flex: 0 0 100%;
-            min-width: 100%; 
+            min-width: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
         }
@@ -201,41 +326,94 @@
             z-index: 10;
         }
 
-        .nav-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            }
-
-            .nav-links a svg {
-            flex-shrink: 0;
-            }
-
-        /* --- CARD CONTENT & BUTTONS --- */
+        /* Card content */
         .card-content { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .card-title { font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700;}
+        .card-title { font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700; }
         .card-desc { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; }
-        
+
+        /* Fixed tags — dark-theme version */
         .card-tags { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
-        .tag { background-color: #f1f5f9; color: #475569; font-size: 0.8rem; padding: 0.35rem 0.85rem; border-radius: 20px; font-weight: 600; }
+        .tag {
+            background: rgba(14, 165, 233, 0.1);
+            color: #7dd3fc;
+            font-size: 0.8rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-weight: 600;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
 
         .card-actions { display: flex; gap: 1rem; margin-top: auto; flex-wrap: wrap; }
-        
-        .action-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1.25rem; font-size: 0.95rem; font-weight: 600; border-radius: 8px; transition: all 0.2s ease; }
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
         .action-btn.primary { background-color: var(--accent-color); color: #ffffff; }
-        .action-btn.primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
-        .action-btn.secondary { background-color: #050505; color: var(--text-main); border: 1px solid #e2e8f0; }
-        .action-btn.secondary:hover { background-color: #000000; transform: translateY(-2px); }
-        
+        .action-btn.primary:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3); }
+        .action-btn.secondary { background-color: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
+        .action-btn.secondary:hover { border-color: var(--accent-color); color: var(--accent-color); transform: translateY(-2px); }
         .action-btn svg { width: 18px; height: 18px; margin-left: 6px; transition: transform 0.2s ease; }
         .action-btn:hover svg { transform: translateX(4px); }
 
-        /* --- FOOTER & RESPONSIVE --- */
-        footer { text-align: center; padding: 3rem 5%; border-top: 1px solid var(--border-color); color: var(--text-muted); }
-        
+        /* ─── CONTACT SECTION ────────────────────────────────────── */
+        .contact-section {
+            max-width: 1200px;
+            margin: 0 auto 6rem auto;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        .contact-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+        }
+
+        .contact-box h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; }
+        .contact-box p { color: var(--text-muted); font-size: 1.1rem; max-width: 520px; margin: 0 auto 2.5rem auto; }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        /* ─── FOOTER ─────────────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ─── SCROLL REVEAL ──────────────────────────────────────── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
+
+        /* ─── RESPONSIVE ─────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .hero { 
-                flex-direction: column-reverse; /* Puts image on top on mobile */
+            .hero {
+                flex-direction: column-reverse;
                 text-align: center;
                 gap: 2.5rem;
                 margin: 4rem auto;
@@ -243,99 +421,174 @@
             .hero-text { text-align: center; }
             .hero p { margin: 0 auto 2rem auto; }
             .hero h1 { font-size: 2.5rem; }
-            .profile-pic { width: 220px; height: 220px; }
-            
+            .hero-cta { justify-content: center; }
+            .profile-pic { width: 200px; height: 200px; }
+
             .nav-links { display: none; }
-            .grid { grid-template-columns: 1fr; } 
-            .media-collage { grid-template-rows: 200px 120px; } 
-            .media-scroller { height: 320px; } 
+            .hamburger { display: flex; }
+            .mobile-menu { display: flex; }
+
+            .grid { grid-template-columns: 1fr; }
+            .media-collage { grid-template-rows: 200px 120px; }
+            .media-scroller { height: 300px; }
+
+            .skills-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .skills-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Navigation -->
+    <!-- ── Navigation ───────────────────────────────────────────── -->
     <nav>
-    <div class="logo">Portfolio</div>
-    <div class="nav-links">
-        <a href="https://drive.google.com/file/d/1ee1FOOOYDMUNS10rGr-B9rjvljiyKcW2/view?usp=share_link" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14 2 14 8 20 8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <polyline points="10 9 9 9 8 9"/>
-        </svg>
-        CV
-        </a>
-        <a href="https://github.com/shahin1009" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
-        </svg>
-        Github
-        </a>
-        <a href="https://www.linkedin.com/in/mohsenghsmi/" target="_blank" rel="noopener noreferrer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-        </svg>
-        Linkedin
-        </a>
-    </div>
+      <div class="nav-inner">
+        <div class="logo">Portfolio</div>
+
+        <!-- Desktop links -->
+        <div class="nav-links">
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+            <a href="#contact">Contact</a>
+            <a href="https://drive.google.com/file/d/1ee1FOOOYDMUNS10rGr-B9rjvljiyKcW2/view?usp=share_link" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                CV
+            </a>
+            <a href="https://github.com/shahin1009" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                GitHub
+            </a>
+            <a href="https://www.linkedin.com/in/mohsenghsmi/" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                LinkedIn
+            </a>
+        </div>
+
+        <!-- Mobile hamburger -->
+        <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+            <span></span><span></span><span></span>
+        </button>
+      </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Mobile drawer -->
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="#projects" class="mobile-link">Projects</a>
+        <a href="#skills" class="mobile-link">Skills</a>
+        <a href="#contact" class="mobile-link">Contact</a>
+        <a href="https://drive.google.com/file/d/1ee1FOOOYDMUNS10rGr-B9rjvljiyKcW2/view?usp=share_link" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            CV
+        </a>
+        <a href="https://github.com/shahin1009" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/mohsenghsmi/" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+        </a>
+    </div>
+
+    <!-- ── Hero ──────────────────────────────────────────────────── -->
     <header class="hero" id="about">
         <div class="hero-text">
             <h1>Hi, I'm Mohsen. <br>I am a Mechanical Engineer.</h1>
             <p>Passionate about designing and building innovative mechanical systems and solving complex engineering problems.</p>
+            <div class="hero-cta">
+                <a href="#projects" class="cta-btn primary">
+                    View Projects
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </a>
+                <a href="#contact" class="cta-btn outline">Get in Touch</a>
+            </div>
         </div>
         <div class="hero-image">
-            <!-- REPLACE THE src="..." with the actual path to your photo -->
             <img src="assets/Images/Siteimages/1401-06-28 18.22.36.jpg" alt="Mohsen Ghasemi" class="profile-pic">
         </div>
     </header>
 
-    <!-- Projects Section -->
+    <!-- ── Skills Section ────────────────────────────────────────── -->
+    <section class="skills-section" id="skills">
+        <h2 class="section-title">Skills & Tools</h2>
+        <div class="skills-grid">
+            <div class="skill-group reveal">
+                <div class="skill-group-label">Programming</div>
+                <div class="skill-pills">
+                    <span class="skill-pill">Python</span>
+                    <span class="skill-pill">MATLAB</span>
+                    <span class="skill-pill">C++</span>
+                </div>
+            </div>
+            <div class="skill-group reveal reveal-delay-1">
+                <div class="skill-group-label">Simulation & Robotics</div>
+                <div class="skill-pills">
+                    <span class="skill-pill">MuJoCo</span>
+                    <span class="skill-pill">ROS</span>
+                    <span class="skill-pill">Simulink</span>
+                    <span class="skill-pill">Simscape</span>
+                </div>
+            </div>
+            <div class="skill-group reveal reveal-delay-2">
+                <div class="skill-group-label">CAD & Design</div>
+                <div class="skill-pills">
+                    <span class="skill-pill">SolidWorks</span>
+                    <span class="skill-pill">3D Printing</span>
+                    <span class="skill-pill">FEA</span>
+                </div>
+            </div>
+            <div class="skill-group reveal reveal-delay-3">
+                <div class="skill-group-label">AI & Machine Learning</div>
+                <div class="skill-pills">
+                    <span class="skill-pill">PyTorch</span>
+                    <span class="skill-pill">Reinforcement Learning</span>
+                    <span class="skill-pill">Computer Vision</span>
+                    <span class="skill-pill">LLMs</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Projects Section ───────────────────────────────────────── -->
     <section class="projects-section" id="projects">
         <h2 class="section-title">Projects</h2>
         
         <div class="grid">
-            
-            <!-- PROJECT 1: Quadroped-->
-            <div class="card">
+
+            <!-- PROJECT 1: Quadruped -->
+            <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_walk-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_walk-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_walk_trot-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_walk_trot-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_running-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_running-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">Quadruped Locomotion</h3>
-                    <p class="card-desc">In this project, I implemented a Proximal Policy Optimization (PPO) algorithm to enable a quadruped robot (Unitree A1) to move with various speeds.</p>
+                    <p class="card-desc">Implemented a Proximal Policy Optimization (PPO) algorithm to enable a Unitree A1 quadruped robot to move at various speeds.</p>
                     <div class="card-tags">
                         <span class="tag">Python</span>
-                        <span class="tag">Mujoco</span>
+                        <span class="tag">MuJoCo</span>
                         <span class="tag">Reinforcement Learning</span>
                     </div>
                     <div class="card-actions">
-                        <!-- make it open in new tab -->
                         <a href="https://github.com/shahin1009/QuadrupedWalkingRL" class="action-btn primary" target="_blank" rel="noopener noreferrer">
                             View Project
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        
                     </div>
                 </div>
             </div>
 
             <!-- PROJECT 2: F1 Regulation Volumes -->
-            <div class="card">
+            <div class="card reveal reveal-delay-1">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
                         <img src="assets/Images/F1_Reg_vol/Regulation Boxes3.PNG" alt="Regulation Box 3">
@@ -347,17 +600,16 @@
                         <img src="assets/Images/F1_Reg_vol/Regulation Boxes6.PNG" alt="Regulation Box 6">
                     </div>
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">F1 2026 Regulation Volumes</h3>
-                    <p class="card-desc">3D CAD modeling and analysis of Formula 1 2026 regulation bounding boxes.</p>
+                    <p class="card-desc">3D CAD modelling and analysis of Formula 1 2026 regulation bounding boxes.</p>
                     <div class="card-tags">
                         <span class="tag">SolidWorks</span>
                         <span class="tag">CAD</span>
                     </div>
                     <div class="card-actions">
                         <a href="https://grabcad.com/library/f1-2026-regulation-boxes-1" class="action-btn primary" target="_blank" rel="noopener noreferrer">
-                            View Details 
+                            View Details
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
                     </div>
@@ -365,26 +617,23 @@
             </div>
 
             <!-- PROJECT 3: SCARA Robot Kinematics -->
-            <div class="card">
+            <div class="card reveal">
                 <div class="card-media media-scroller">
-                    <!-- Image 1 -->
                     <div class="img-wrapper">
-                        <img src="assets/Images/ScaraDesign/Picture1.gif" alt="Before Design">
+                        <img src="assets/Images/ScaraDesign/Picture1.gif" alt="SCARA forward kinematics">
                         <span class="scroll-hint">Swipe &rarr;</span>
                     </div>
-                    <!-- Image 2 -->
                     <div class="img-wrapper">
-                        <img src="assets/Images/ScaraDesign/InverseKine_parabolaPause_CLOSEDLINK-ezgif.com-video-to-gif-converter.gif" alt="After Design">
+                        <img src="assets/Images/ScaraDesign/InverseKine_parabolaPause_CLOSEDLINK-ezgif.com-video-to-gif-converter.gif" alt="SCARA inverse kinematics">
                     </div>
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">SCARA Robot Kinematics</h3>
                     <p class="card-desc">Design and analysis of SCARA robot kinematics for precise picking and placement tasks.</p>
                     <div class="card-tags">
                         <span class="tag">MATLAB</span>
                         <span class="tag">Simulink</span>
-                        <span class="tag">Simscape </span>
+                        <span class="tag">Simscape</span>
                         <span class="tag">SolidWorks</span>
                     </div>
                     <div class="card-actions">
@@ -396,19 +645,16 @@
                 </div>
             </div>
 
-
-             <!-- PROJECT 4: Soft Actuator Design -->
-            <div class="card">
+            <!-- PROJECT 4: Soft Actuator -->
+            <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
-                        <video src="assets/Images/SoftActuator/SoftActuatorInAction.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <video src="assets/Images/SoftActuator/SoftActuatorInAction.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
-                    
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">Soft Actuator Design</h3>
-                    <p class="card-desc">Design and development of a soft hand gripper with 3 fingers for picking delicate objects. Two different grades of silicone were used for varying stiffness at the surface for higher friction and the back for more stiffness to have firmer grip.</p>
+                    <p class="card-desc">Design and development of a soft hand gripper with 3 fingers for picking delicate objects. Two silicone grades were used for varying stiffness — higher friction at the surface and firmer backing for a secure grip.</p>
                     <div class="card-tags">
                         <span class="tag">Embedded Systems</span>
                         <span class="tag">3D Printing</span>
@@ -417,50 +663,46 @@
                 </div>
             </div>
 
-
-
-            <!-- PROJECT 5: Advanced Control -->
-            <div class="card">
+            <!-- PROJECT 5: Advanced Control — fixed tags -->
+            <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
-                         <video src="assets/Images/ControlLab/VID-20241231-WA0006.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                        <video src="assets/Images/ControlLab/VID-20241231-WA0006.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/ControlLab/Picture1.jpg" alt="Regulation Box 5">
+                        <img src="assets/Images/ControlLab/Picture1.jpg" alt="Control Lab setup">
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/ControlLab/Picture2.png" alt="Regulation Box 6">
+                        <img src="assets/Images/ControlLab/Picture2.png" alt="Control response plot">
                     </div>
                 </div>
-                
                 <div class="card-content">
-                    <h3 class="card-title">Advanced Control of a 2DOF helicopter model</h3>
-                    <p class="card-desc">In this project we have developed control strategies for a 2DOF helicopter model of Quanser Aero 2. Various sensors were utilized including IMU unit and encoders.</p>
+                    <h3 class="card-title">Advanced Control of a 2DOF Helicopter Model</h3>
+                    <p class="card-desc">Developed control strategies for a 2DOF helicopter model (Quanser Aero 2). Various sensors were utilised including an IMU and encoders.</p>
                     <div class="card-tags">
-                        <span class="tag">SolidWorks</span>
-                        <span class="tag">CAD</span>
+                        <span class="tag">Control Systems</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">Simulink</span>
+                        <span class="tag">IMU</span>
+                        <span class="tag">Sensors</span>
                     </div>
                 </div>
             </div>
 
-
-            <!-- PROJECT 6: Cliport -->
-            <div class="card">
+            <!-- PROJECT 6: CLIPort / LLM -->
+            <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single2">
                     <div class="img-wrapper">
-                        <video src="assets/Images/Cliport/CLIPORT-Results.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
-
+                        <video src="assets/Images/Cliport/CLIPORT-Results.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
-                    
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">LLM for Robotic Control</h3>
-                    <p class="card-desc">In this project various strategies were developed to use large language models for robotic control tasks. The system recieves a natural language command and translates it into control actions for the robot.</p>
+                    <p class="card-desc">Various strategies were developed to use large language models for robotic control tasks. The system receives a natural language command and translates it into control actions for the robot.</p>
                     <div class="card-tags">
                         <span class="tag">Vision</span>
                         <span class="tag">PyTorch</span>
-                        <span class="tag">LLM</span>
+                        <span class="tag">LLMs</span>
                     </div>
                     <div class="card-actions">
                         <a href="https://drive.google.com/file/d/1wIWk7dURgK1FtrRXMScqdyuVeN4pWS6M/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">
@@ -472,30 +714,26 @@
                 </div>
             </div>
 
-
-            <!-- PROJECT 7: Autonomous navigation -->
-            <div class="card">
+            <!-- PROJECT 7: Autonomous Navigation -->
+            <div class="card reveal">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
-                        <video src="assets/Images/Autonomous Vehicles/Autonomous navigation.mp4" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
-
+                        <video src="assets/Images/Autonomous Vehicles/Autonomous navigation.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
-                    
                 </div>
-                
                 <div class="card-content">
                     <h3 class="card-title">Autonomous Navigation</h3>
-                    <p class="card-desc">In this project we have developed autonomous navigation strategies for mobile robots, enabling them to navigate complex environments without human intervention. The systems recieves Lidar data and processes it to make navigation decisions and changes the decision when an obstacle is detected.</p>
+                    <p class="card-desc">Developed autonomous navigation strategies for mobile robots, enabling them to navigate complex environments without human intervention using LiDAR-based obstacle detection and decision-making.</p>
                     <div class="card-tags">
                         <span class="tag">ROS</span>
                         <span class="tag">Linux</span>
+                        <span class="tag">LiDAR</span>
                     </div>
                     <div class="card-actions">
                         <a href="https://drive.google.com/file/d/1XMCLrZVnpLn1rJAWmE2wVJZAoyPUdkOm/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">
                             View Project
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                         </a>
-                        <a href="#" class="action-btn secondary">GitHub</a>
                     </div>
                 </div>
             </div>
@@ -503,10 +741,64 @@
         </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer id="contact">
-        <p>&copy; 2026 Mohsen Ghasemi.</p>
+    <!-- ── Contact Section ───────────────────────────────────────── -->
+    <section class="contact-section" id="contact">
+        <div class="contact-box reveal">
+            <h2>Let's work together</h2>
+            <p>Whether it's a robotics project, research collaboration, or just a chat — my inbox is always open.</p>
+            <div class="contact-links">
+                <a href="mailto:mohsen.ghasemi@mail.polimi.it" class="cta-btn primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Send Email
+                </a>
+                <a href="https://www.linkedin.com/in/mohsenghsmi/" class="cta-btn outline" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/shahin1009" class="cta-btn outline" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Footer ────────────────────────────────────────────────── -->
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
     </footer>
+
+    <!-- ── JavaScript ─────────────────────────────────────────────── -->
+    <script>
+        // Hamburger menu
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('open');
+            mobileMenu.classList.toggle('open');
+        });
+
+        // Close mobile menu when a link is clicked
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('open');
+                mobileMenu.classList.remove('open');
+            });
+        });
+
+        // Scroll-triggered reveal via IntersectionObserver
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.12 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
 
 </body>
 </html>
