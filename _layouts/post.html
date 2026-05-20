@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page.title }} | {{ site.title }}</title>
+  <meta name="description" content="{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}">
+  <style>
+    :root {
+      --bg: #121212;
+      --surface: #1e1e1e;
+      --text: #e0e0e0;
+      --muted: #a0a0a0;
+      --accent: #0ea5e9;
+      --border: #2c2c2c;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .wrap {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 2rem 1.25rem 5rem;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0 2rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+    }
+
+    .topbar a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .topbar a:hover { color: var(--accent); }
+
+    h1, h2, h3 { line-height: 1.2; }
+    h1 { font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 0.5rem; }
+    h2 { font-size: 1.6rem; margin-top: 2.5rem; }
+    p, li { color: var(--text); font-size: 1.05rem; }
+    .meta { color: var(--muted); margin-bottom: 2rem; }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      margin: 1.5rem 0 0.5rem;
+      display: block;
+    }
+
+    .caption {
+      color: var(--muted);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+    }
+
+    code {
+      background: #191919;
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.4rem;
+      border-radius: 6px;
+    }
+
+    pre {
+      background: #191919;
+      border: 1px solid var(--border);
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 12px;
+    }
+
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a href="{{ '/' | relative_url }}">← Back to portfolio</a>
+      <a href="{{ '/blog/' | relative_url }}">Blog</a>
+    </div>
+
+    <article>
+      <h1>{{ page.title }}</h1>
+      <div class="meta">{{ page.date | date: "%B %d, %Y" }}</div>
+      {{ content }}
+    </article>
+  </div>
+</body>
+</html>
