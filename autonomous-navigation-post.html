@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autonomous Robot Navigation | Mohsen Ghasemi</title>
+
+    <meta name="description" content="Advanced path planning and control methods for a TurtleBot3 robot using A* and real-time SLAM navigation.">
+    
+    <!-- MathJax for rendering LaTeX equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']]
+          }
+        };
+    </script>
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-color); }
+
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        .back-link:hover { color: var(--accent-hover); }
+
+        /* ─── BLOG CONTENT ───────────────────────────────────────── */
+        .blog-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .blog-header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .blog-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h2 { font-size: 2rem; margin: 3rem 0 1.5rem; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; margin: 2rem 0 1rem; color: #f0f0f0; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        
+        /* ─── IMAGES & MEDIA ─────────────────────────────────────── */
+        .image-wrapper {
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+        
+        .image-wrapper img,
+        .image-wrapper video {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-caption {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
+        /* ─── CODE & MATH ────────────────────────────────────────── */
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+            line-height: 1.5;
+        }
+        
+        .code-block strong { color: var(--accent-color); }
+        .code-comment { color: #6a9955; font-style: italic; }
+
+        .math-block { margin: 2rem 0; text-align: center; font-size: 1.2rem; overflow-x: auto; }
+
+        .info-box {
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            border-left: 4px solid #eab308;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .info-box-title { font-weight: bold; color: #eab308; margin-bottom: 0.5rem; }
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2.2rem; }
+            h2 { font-size: 1.7rem; }
+            .image-grid-2 { grid-template-columns: 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-inner">
+        <div class="logo">Mohsen Ghasemi</div>
+        <a href="index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Portfolio
+        </a>
+      </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <main class="blog-container">
+        <header class="blog-header">
+            <h1 class="blog-title">Autonomous Robot Navigation</h1>
+            <p>Creating and testing advanced path planning and control methods for a TurtleBot3 robot in a Gazebo simulation.</p>
+        </header>
+
+        <section>
+            <h2>Introduction</h2>
+            <p>This project focuses on creating and testing advanced path planning and control methods for a TurtleBot3 robot in a Gazebo simulation. The project has two main goals: Part A focuses on generating an optimal path using the A* algorithm with a pre-existing map. Part B focuses on real-time navigation, where the robot updates the map and adjusts its path based on sensor data to reach its target.</p>
+            <p>For Part A, the robot uses a static map to plan its path. The A* algorithm calculates a sequence of waypoints, creating a collision-free path from a start point to multiple goal points. This path is sent to the Gazebo simulation through ROS, where the TurtleBot3 robot follows the planned route. The robot's position and orientation are continuously monitored to adjust its movements. A proportional controller is used to correct any errors and keep the robot aligned with the planned path.</p>
+            <p>For Part B, the robot starts with no pre-generated map and only a goal point. It uses LIDAR to scan its environment and build a map in real time with SLAM (Simultaneous Localization and Mapping). As the robot moves, the map updates with new obstacles. The robot checks if the planned path collides with any new obstacles. If a collision is detected, the RRT algorithm recalculates a new, safe path to guide the robot toward its goal.</p>
+            <p>This second approach combines real-time mapping, obstacle detection, path planning, and feedback control. The robot processes its position, orientation, and map updates in ROS to quickly make decisions about replanning. This allows it to respond to changes like moving objects or new obstacles while staying on track.</p>
+
+            <h2>Part A: Optimal Path Generation Using A* Algorithm</h2>
+
+            <h3>Mapping with Gmapping</h3>
+            <p>The mapping process plays a foundational role in the navigation system for the TurtleBot3. To create an accurate map of the simulated environment, the teleop node is used to manually control the robot’s movement within the environment. This manual operation ensures that the robot can explore all accessible areas of the environment, enabling comprehensive map generation.</p>
+            <p>The gmapping algorithm, a widely used implementation of Simultaneous Localization and Mapping (SLAM), is utilized to construct an occupancy grid map. The gmapping process leverages LIDAR sensor data to identify free and occupied spaces in the environment, representing them as a grid of binary values. Free spaces are marked as 1 (navigable), and occupied spaces are marked as 0 (obstacles). This grid-based representation provides the necessary input for the subsequent path planning algorithm.</p>
+            <p>The mapping process requires careful control of the robot's movement to ensure sufficient coverage of the environment. For example, the robot must rotate in place at key locations to capture the surrounding area and ensure that no obstacles are missed. </p>
+
+            <div class="image-wrapper">
+                <div class="image-grid-2">
+                    <div>
+                        <img src="assets/blog/autonomous-navigation/house.png" alt="House in Gazebo">
+                        <div class="image-caption">House in Gazebo</div>
+                    </div>
+                    <div>
+                        <img src="assets/blog/autonomous-navigation/mapturtlehouse.jpg" alt="House picture from gmapping">
+                        <div class="image-caption">House picture from gmapping</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>A* Algorithm Development</h3>
+            <p>We developed a custom A* algorithm for navigation. In this implementation, the algorithm is optimized to handle large maps (384x384) by leveraging sparse matrix representations in MATLAB. Sparse matrixes are more memory efficient since they only need to track the values we assign.</p>
+            <p>Several heuristic functions were implemented to guide the A* algorithm, including Manhattan distance, Euclidean distance, and Chebyshev distance. These heuristics determine the cost of moving from one grid cell to another, balancing the trade-off between computational efficiency and path optimality. The algorithm dynamically calculates the g-score (cost from start to current node) and f-score (estimated total cost from start to goal).</p>
+            <p>The A* algorithm also incorporates collision checking to ensure that the planned path does not intersect with obstacles. This is achieved by evaluating the grid cells along the path and updating the trajectory if any potential conflicts are detected.</p>
+
+            <div class="code-block">
+<strong>Algorithm 1:</strong> Simplified A* Algorithm
+<hr style="border-color: #333; margin: 10px 0;">
+<strong>Input:</strong> Start node $x_{\text{start}}$, Goal node $x_{\text{goal}}$, Grid map $G$
+<strong>Output:</strong> Path $P$ from $x_{\text{start}}$ to $x_{\text{goal}}$
+<strong>Initialize:</strong> 
+$OpenSet \gets \{x_{\text{start}}\}$ <span class="code-comment">// Nodes to be evaluated</span>
+$CameFrom \gets \emptyset$ <span class="code-comment">// Stores the parent of each node</span>
+$g(x_{\text{start}}) \gets 0$ <span class="code-comment">// Cost from start to current node</span>
+$f(x_{\text{start}}) \gets h(x_{\text{start}}, x_{\text{goal}})$ <span class="code-comment">// Estimated cost to goal</span>
+
+<strong>While</strong> $OpenSet$ is not empty:
+    $x_{\text{current}} \gets \text{node in } OpenSet \text{ with lowest } f(x)$
+    <strong>If</strong> $x_{\text{current}} = x_{\text{goal}}$:
+        <strong>Return</strong> $\text{ReconstructPath}(CameFrom, x_{\text{current}})$
+    
+    Remove $x_{\text{current}}$ from $OpenSet$
+    <strong>For</strong> each $x_{\text{neighbor}}$ of $x_{\text{current}}$:
+        $g_{\text{tentative}} \gets g(x_{\text{current}}) + \text{Cost}(x_{\text{current}}, x_{\text{neighbor}})$
+        <strong>If</strong> $x_{\text{neighbor}}$ not in $OpenSet$ or $g_{\text{tentative}} < g(x_{\text{neighbor}})$:
+            $CameFrom[x_{\text{neighbor}}] \gets x_{\text{current}}$
+            $g(x_{\text{neighbor}}) \gets g_{\text{tentative}}$
+            $f(x_{\text{neighbor}}) \gets g(x_{\text{neighbor}}) + h(x_{\text{neighbor}}, x_{\text{goal}})$
+            <strong>If</strong> $x_{\text{neighbor}}$ not in $OpenSet$:
+                Add $x_{\text{neighbor}}$ to $OpenSet$
+
+<strong>Return</strong> Failure <span class="code-comment">// No path found</span>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/4Pointspath.jpg" alt="Four different goal and path using A algorithm">
+                <div class="image-caption">Four different goal and paths using A* algorithm without resizing the Image</div>
+            </div>
+
+            <div class="image-grid-2">
+                <div class="info-box">
+                    <div class="info-box-title">Path 1</div>
+                    Elapsed time: 21.4602 seconds<br>
+                    Total path cost: 255.40<br>
+                    Total number of nodes: 239.00<br>
+                    Total number of explored nodes: 14452
+                </div>
+                <div class="info-box">
+                    <div class="info-box-title">Path 2</div>
+                    Elapsed time: 11.9899 seconds<br>
+                    Total path cost: 279.30<br>
+                    Total number of nodes: 260.00<br>
+                    Total number of explored nodes: 8028
+                </div>
+                <div class="info-box">
+                    <div class="info-box-title">Path 3</div>
+                    Elapsed time: 13.1127 seconds<br>
+                    Total path cost: 212.27<br>
+                    Total number of nodes: 188.00<br>
+                    Total number of explored nodes: 8878
+                </div>
+                <div class="info-box">
+                    <div class="info-box-title">Path 4</div>
+                    Elapsed time: 21.599 seconds<br>
+                    Total path cost: 401.38<br>
+                    Total number of nodes: 368.00<br>
+                    Total number of explored nodes: 14420
+                </div>
+            </div>
+
+            <h3>Coordinate Transformation</h3>
+            <p>With the TurtleBot3, it is crucial to handle different coordinate systems effectively. We need to transform between pixel coordinates (used in A*) and world coordinates (used for robot navigation). The transformation from pixel coordinates $(u,v)$ to world coordinates $(x,y)$ is given by:</p>
+
+            <div class="math-block">
+                $$ 
+                \begin{aligned}
+                x &= \frac{u - 200}{20} \\
+                y &= \frac{v - 184}{-20}
+                \end{aligned}
+                $$
+            </div>
+
+            <p>Where $(u,v)$ are pixel coordinates and $(x,y)$ are world coordinates, utilizing a scaling factor of 20 units per world coordinate (0.05 resolution) and an origin offset of (200, 184) in pixel coordinates. Conversely, the transformation from world coordinates to pixel coordinates is structured as:</p>
+
+            <div class="math-block">
+                $$
+                \begin{aligned}
+                u &= 20 \lfloor x \rfloor + 200 \\
+                v &= -20 \lfloor y \rfloor + 184
+                \end{aligned}
+                $$
+            </div>
+
+            <p>The floor function ensures discrete pixel values are obtained. Following the transformation of coordinates, the system calculates the orientation angles between consecutive waypoints:</p>
+
+            <div class="math-block">
+                $$ \theta_i = \text{atan2}(y_{i+1} - y_i, x_{i+1} - x_i) $$
+            </div>
+
+            <p>Here, $\theta_i$ represents the orientation angle at waypoint $i$, while $(x_i, y_i)$ and $(x_{i+1}, y_{i+1})$ are the consecutive waypoint coordinates. The final waypoint inherently adopts the orientation of its predecessor, and the angles are subsequently normalized to $[-\pi, \pi]$ using wrapToPi. Orientations are precisely calculated using the two-argument arctangent function to guarantee proper quadrant handling, ensuring accurate robot navigation between waypoints.</p>
+
+            <h3>Path Planning and Feedback Control</h3>
+            <p>After the A* algorithm generates the optimal path, the waypoints are transmitted to the robot in the Gazebo simulation environment. The robot sequentially follows this trajectory, moving from one waypoint to the next. However, due to dynamic factors, the robot may deviate from the planned path. To address this drift, a feedback control mechanism is implemented.</p>
+            <p>The feedback control system leverages real-time data from the robot’s sensors, specifically its position and orientation, to continuously correct deviations from the desired trajectory. The position and orientation data are obtained via subscription to the Odometry node and integrated by connecting it to the bus selector. The raw orientation quaternion must be mathematically translated into a yaw angle using the following formula:</p>
+            
+            <div class="math-block">
+                $$ \text{yaw} = \text{atan2}(2(w \cdot z + x \cdot y), 1 - 2(y^2 + z^2)) $$
+            </div>
+
+            <p>Where $x$, $y$, $z$, and $w$ represent the outputs of the orientation signal. Waypoint tracking is then achieved using a Proportional controller, which continuously calculates the error between the robot’s current state and the target state. The controller dynamically adjusts the robot's forward velocity and steering angle to minimize this error.</p>
+
+            <div class="code-block">
+<strong>Algorithm 2:</strong> Waypoint Tracking Controller
+<hr style="border-color: #333; margin: 10px 0;">
+<strong>Input:</strong> Current position $(x, y, \theta)$, Waypoints $A = \{(x_i, y_i, \theta_i)\}_{i=1}^N$
+<strong>Output:</strong> Control inputs $(u_1, u_2)$, Completion flag
+Initialize counter $\text{counter} \gets 1$, $\text{flag} \gets \text{false}$
+
+<strong>While true:</strong>
+    Get current waypoint $(x_{\text{ref}}, y_{\text{ref}}, \theta_{\text{ref}}) \gets A[\text{counter}]$
+    Compute distance error: $\text{distance\_error} \gets \sqrt{(x_{\text{ref}} - x)^2 + (y_{\text{ref}} - y)^2}$
+    Compute heading error: $\text{error}_\theta \gets \text{atan2}(y_{\text{ref}} - y, x_{\text{ref}} - x) - \theta$
+    Compute linear velocity: $u_1 \gets K_x \cdot \text{distance\_error}$
+    Compute angular velocity: $u_2 \gets K_\theta \cdot \text{error}_\theta$
+    
+    <strong>If</strong> $\text{distance\_error} < \text{threshold}$:
+        <strong>If</strong> $\text{counter} \geq N$:
+            $u_1 \gets 0$, $u_2 \gets 0$, $\text{flag} \gets \text{true}$
+            <strong>Break</strong>
+        <strong>Else:</strong>
+            $\text{counter} \gets \text{counter} + 1$
+
+<strong>Return</strong> $(u_1, u_2, \text{flag})$
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/PartAsimulink.png" alt="Simulink Model Part A">
+                <div class="image-caption">Simulink block diagram configuration</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/4PointspathcontrolXY.jpg" alt="Visualization of the simulated path and the computed path">
+                <div class="image-caption">Visualization of the simulated path and the computed path using the A* algorithm on the Turtlebot3 robot. The blue line represents the simulated path based on sensor data, while the red line indicates the optimal path computed by the A* algorithm.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/4Pointspathcontrolspeeds.jpg" alt="Plots of linear and angular velocities">
+                <div class="image-caption">Plots of linear and angular velocities ($V_{\text{trj}}$ and $W_{\text{trj}}$) over time. The top subplot shows the linear velocity trajectory, while the bottom subplot depicts the angular velocity trajectory.</div>
+            </div>
+
+            <h2>Part B: Dynamic Navigation and Real-Time Path Planning Based on LIDAR Data</h2>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/SLAMandTrackBlocks.png" alt="Autonomous Navigation overview">
+                <div class="image-caption">The Autonomous Navigation block overview</div>
+            </div>
+
+            <p>To implement the second mode of navigation, which focuses on dynamic real-time path planning and control, the system was designed in Simulink and divided into several dedicated modules. This modular architecture ensures that the robot can dynamically update its path based on real-time map data and obstacle information while maintaining robust mechanical control over its movement.</p>
+
+            <h3>Map Receiver Module</h3>
+            <p>The Map Receiver module acts as the starting point of the workflow. It subscribes to the ROS topic to receive real-time map data encompassing information about the robot's immediate surrounding environment. As the robot moves, new obstacles scanned by the LIDAR sensor are continuously appended to the map. This updated map reflects the current physical state of the environment and serves as a critical, continuously evolving input for the path planning process.</p>
+            <p>The incoming map data is preprocessed to extract the map's overall dimensions, raw data array, and resolution scaling, ensuring compatibility with the subsequent operational modules. Additionally, this module rotates the map matrix by a predefined angle to precisely align it with the robot's global coordinate frame for accurate path calculation. The fully processed map is then passed directly as input to the path planning module.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/PartBmapreceived.png" alt="Map received block">
+                <div class="image-caption">Map Receiver module configuration</div>
+            </div>
+
+            <h3>Path Planning Module</h3>
+            <p>The Path Planning module computes a collision-free path bridging the robot's current position to its designated goal. It utilizes the updated occupancy map fed from the Map Receiver, alongside the start and goal spatial coordinates, as its primary inputs.</p>
+            <p>This module utilizes the Rapidly-exploring Random Tree (RRT*) algorithm to govern the path planning process. RRT* systematically explores the map, effectively avoiding obstacles while refining the selected path to minimize its overall travel cost. This efficiency makes it an optimal choice for dynamic robotic environments. The module outputs a continuously updated path, which is rigorously checked for safety tolerances before being transmitted to the Control module.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/PartBpath.png" alt="Path planning activated when a trigger signal is send">
+                <div class="image-caption">Path planning activated when a trigger signal is sent</div>
+            </div>
+
+            <div class="image-wrapper">
+                <div class="image-grid-2">
+                    <div>
+                        <img src="assets/blog/autonomous-navigation/PartBpath1.png" alt="Path iteration 1">
+                        <div class="image-caption">Path planning iteration 1</div>
+                    </div>
+                    <div>
+                        <img src="assets/blog/autonomous-navigation/PartBpath2.png" alt="Path iteration 2">
+                        <div class="image-caption">Path planning iteration 2</div>
+                    </div>
+                </div>
+                <div class="image-caption">The path updates dynamically as new environmental map data rolls in when the previous spatial map is no longer valid.</div>
+            </div>
+
+            <h3>Trigger Module</h3>
+            <p>The Trigger module is responsible for checking if the actively planned path overlaps with any newly detected obstacles on the updated map. It cross-references the planned trajectory with the updated map matrix; if a collision is detected, it outputs a Trigger Signal to the Path Planning module. This signal instructs the system to halt the current trajectory and compute a new, viable path. The output of the function strictly yields a logical 0 or 1. When the output evaluates to 1, a pulse generator fires a signal, and the change detector processes this transition to fully activate the trigger protocol.</p>
+            <p>This module is vital in helping the robot avoid collisions in rapidly changing environments where physical obstacles can move or manifest unexpectedly. If the path remains clear, it seamlessly passes the validated route forward to the Control module.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/PartBtrigger.png" alt="Trigger block">
+                <div class="image-caption">Trigger module configuration</div>
+            </div>
+
+            <div class="code-block">
+<strong>Algorithm 3:</strong> Collision Detection for Path Validation
+<hr style="border-color: #333; margin: 10px 0;">
+<strong>Require:</strong> Map $map$, Planned Path $path$
+<strong>Ensure:</strong> Collision Flag $checkCollision$
+
+$checkCollision \gets 0$ <span class="code-comment">// Initialize collision flag to zero</span>
+<strong>For</strong> $i = 1$ to $|path| - 1$: <span class="code-comment">// Iterate through path segments</span>
+    $startPoint \gets path[i]$ 
+    $endPoint \gets path[i+1]$ 
+    
+    $x_{\text{start}} \gets \text{world2pix}(startPoint)$ 
+    $x_{\text{end}} \gets \text{world2pix}(endPoint)$ 
+    
+    $t \gets \text{linspace}(0, 1, 200)$ <span class="code-comment">// Interpolate points between start and end</span>
+    $x_{\text{points}} \gets x_{\text{start}}[1] + t \cdot (x_{\text{end}}[1] - x_{\text{start}}[1])$
+    $y_{\text{points}} \gets x_{\text{start}}[2] + t \cdot (x_{\text{end}}[2] - x_{\text{start}}[2])$
+    
+    <strong>If any</strong> $map[x_{\text{points}}, y_{\text{points}}] = 0$:
+        $checkCollision \gets 1$ <span class="code-comment">// Collision detected</span>
+        <strong>Return</strong> $checkCollision$
+
+<strong>Return</strong> $checkCollision$ <span class="code-comment">// No collision detected</span>
+            </div>
+
+            <h3>Control Module</h3>
+            <p>The Control module acts as the core operational component of the system. It processes the planned path, real-time map data, and continuous sensor readings to precisely govern the robot's physical movement. This module ensures the robot smoothly follows the path while autonomously avoiding obstacles. It utilizes several key inputs, including the robot's current coordinates defined by its $x$ and $y$ position along with its spatial orientation $\theta$, the planned trajectory provided by the Path Planning module, and laser scan data utilized to detect surrounding physical obstructions.</p>
+            <p>The control module operates dynamically across two distinct modes: normal tracking and recovery mode. In normal tracking mode, the robot systematically follows the individual waypoints derived from the planned path. The module continuously calculates the distance to the next waypoint and adjusts its speed and directional heading accordingly. It computes a linear velocity constraint to control forward and backward translation, alongside an angular velocity constraint to govern rotational turning toward the active waypoint. The algorithm inherently limits the maximum speed and acceleration to ensure mechanical stability.</p>
+            <p>If the robot becomes stuck or inadvertently collides with a physical obstacle, it immediately switches into recovery mode. In this state, the laser scan data assesses the clearance distance to obstacles present in the front, left, right, and rear sensor fields. Based on this clearance data, the robot initiates specific evasive actions; it will reverse its linear velocity if an obstacle is detected directly in front, or it will rotate left or right to seek a clear spatial trajectory. The recovery mode automatically terminates once the immediate path is evaluated as clear, allowing the robot to seamlessly revert to normal tracking.</p>
+            <p>The module calculates and updates its commands in real-time, subsequently transmitting them to the ROS command velocity topic to actuate the robot's wheel motors. It simultaneously tracks the robot's real-world position and structural velocity to facilitate continuous micro-adjustments as required by the terrain.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/PartBcontroller.png" alt="Controller module">
+                <div class="image-caption">Controller module structure</div>
+            </div>
+
+            <div class="code-block">
+<strong>Algorithm 4:</strong> Control Module
+<hr style="border-color: #333; margin: 10px 0;">
+<strong>Require:</strong> Current Position $(x, y, \theta)$, Path $A$, Laser Data $laser\_data$, Trigger Signal $isnewA$
+<strong>Ensure:</strong> Control Commands $(u_1, u_2)$
+Initialize variables: $counter \gets 1$, $recovery\_state \gets 0$
+
+<strong>If</strong> $A$ is empty or $isnewA$ is true:
+    Reset $counter$ and $recovery\_state$
+
+<strong>Obstacle Detection:</strong>
+Process $laser\_data$ to compute $front\_dist$, $left\_dist$, $right\_dist$
+Detect obstacle: $obstacle\_detected \gets (front\_dist < MIN\_SAFE\_DIST)$
+
+<strong>If</strong> $obstacle\_detected$ or $recovery\_state > 0$:
+    <strong>Recovery Mode:</strong>
+    <strong>If</strong> $recovery\_state = 0$: <span class="code-comment">// Obstacle detected</span>
+        Start recovery: $recovery\_state \gets 1$
+    <strong>Else If</strong> $recovery\_state = 1$: <span class="code-comment">// Backing up</span>
+        Set $(u_1, u_2) \gets (-max\_vel, 0)$
+        <strong>If</strong> timer exceeds limit or rear obstacle detected:
+            Switch to rotate: $recovery\_state \gets 2$
+    <strong>Else If</strong> $recovery\_state = 2$: <span class="code-comment">// Rotating</span>
+        Set $(u_1, u_2) \gets (0, \text{rotation direction})$
+        <strong>If</strong> clear path detected or timer exceeds limit:
+            Resume normal mode: $recovery\_state \gets 0$
+<strong>Else:</strong>
+    <strong>Path Following Mode:</strong>
+    Get next waypoint: $(x_{ref}, y_{ref}, \theta_{ref}) \gets A[counter]$
+    Compute position error: $error_x$, $error_y$
+    Compute heading error: $error_\theta \gets \text{atan2}(error_y, error_x) - \theta$
+    Compute control commands: $u_1 \gets K_x \cdot \text{distance\_error}, \quad u_2 \gets K_t \cdot error_\theta$
+    Apply speed limits: $u_1 \leq max\_vel$, $u_2 \leq max\_yaw\_rate$
+    
+    <strong>If</strong> distance to waypoint $<$ threshold:
+        Advance to next waypoint: $counter \gets counter + 1$
+        <strong>If</strong> $counter > |A|$:
+            Stop: $(u_1, u_2) \gets (0, 0)$
+
+<strong>Return</strong> $(u_1, u_2)$
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/simupath.jpg" alt="Visualization of the autonomous navigation">
+                <div class="image-caption">Visualization of the autonomous navigation execution on the Turtlebot3 robot in Gazebo.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/rviz.png" alt="Region explored by the robot autonomously" style="max-width: 80%;">
+                <div class="image-caption">Region explored by the robot autonomously to maneuver from the start point to the goal. <br><a href="https://polimi365-my.sharepoint.com/:v:/g/personal/10944120_polimi_it/EZvYPG1wJC5IlW29v63G2tEBcyxsZLmDYgYweFHqB4yQ3g?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=1xtePs" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); font-weight: 600;">(Click here for Animation)</a></div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/autonomous-navigation/vandw.jpg" alt="Plots of linear and angular velocities">
+                <div class="image-caption">Plots of linear and angular velocities ($V_{\text{trj}}$ and $W_{\text{trj}}$) during dynamic navigation over time.</div>
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>In this project, we implemented two distinct approaches for robot navigation: one tailored for static environments and one designed for dynamic, unknown environments. In Part A, the robot successfully utilized a pre-built static map and the A* algorithm to generate an efficient path to its goals. This method proved simple and highly reliable, as it functioned effectively with fixed maps and completely planned the trajectory ahead of time. In Part B, the robot tackled a significantly more complex task by autonomously exploring unknown areas, constructing a topological map in real-time using LIDAR sensors, and dynamically replanning safe paths with the RRT* algorithm whenever new obstacles were actively detected. This robust approach allowed the robot to successfully adapt to real-time changes in the environment, such as moving obstacles or newly discovered regions. Together, these methodologies practically demonstrate how the autonomous robot can handle both predictable and highly unpredictable situations, rendering it versatile and capable of navigating across a wide range of complex scenarios.</p>
+
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
