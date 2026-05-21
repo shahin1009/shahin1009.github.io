@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog | Mohsen Ghasemi</title>
+
+    <meta name="description" content="Articles and case studies on robotics, control systems, and AI by Mohsen Ghasemi.">
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
+
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+        .back-link:hover { color: var(--accent-color); }
+
+        /* ─── BLOG HEADER ────────────────────────────────────────── */
+        .page-header {
+            max-width: 1200px;
+            margin: 4rem auto 3rem auto;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ─── BLOG GRID ──────────────────────────────────────────── */
+        .blog-section {
+            max-width: 1200px;
+            margin: 0 auto 6rem auto;
+            padding: 0 5%;
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .blog-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .blog-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color);
+        }
+
+        .blog-card-media {
+            width: 100%;
+            height: 220px;
+            overflow: hidden;
+            background-color: #0a0a0a;
+            position: relative;
+        }
+
+        .blog-card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .blog-card:hover .blog-card-media img {
+            transform: scale(1.05);
+        }
+
+        .blog-card-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .blog-date {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+            display: block;
+        }
+
+        .blog-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .blog-excerpt {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .blog-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .tag {
+            background: rgba(14, 165, 233, 0.1);
+            color: #7dd3fc;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 12px;
+            font-weight: 600;
+            border: 1px solid rgba(14, 165, 233, 0.2);
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            font-weight: 600;
+            color: var(--text-main);
+            gap: 6px;
+            transition: color 0.2s ease;
+            margin-top: auto;
+        }
+
+        .blog-card:hover .read-more {
+            color: var(--accent-color);
+        }
+
+        .read-more svg {
+            transition: transform 0.2s ease;
+        }
+
+        .blog-card:hover .read-more svg {
+            transform: translateX(4px);
+        }
+
+        /* ─── FOOTER ─────────────────────────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 { font-size: 2.5rem; }
+            .blog-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-inner">
+        <div class="logo">Mohsen Ghasemi</div>
+        <a href="index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Portfolio
+        </a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="page-header">
+        <h1>Blog & Case Studies</h1>
+        <p>Detailed technical breakdowns of my projects spanning robotics, autonomous navigation, and machine learning.</p>
+    </header>
+
+    <!-- Blog Grid -->
+    <section class="blog-section">
+        <div class="blog-grid">
+
+            <!-- Blog Post 1: LLM Robotics -->
+            <a href="llm-robotics-post.html" class="blog-card">
+                <div class="blog-card-media">
+                    <img src="assets/blog/llm-robotics/board set up.png" alt="Chessboard setup for robotic manipulation">
+                </div>
+                <div class="blog-card-content">
+                    <span class="blog-date">May 2026</span>
+                    <h2 class="blog-title">Language Models in Robotics</h2>
+                    <p class="blog-excerpt">Combining LLM-based decision making with physical robotic actions to perform intelligent tasks using the game of chess as a testing domain.</p>
+                    <div class="blog-tags">
+                        <span class="tag">LLMs</span>
+                        <span class="tag">Robotics</span>
+                        <span class="tag">CLIPORT</span>
+                    </div>
+                    <span class="read-more">
+                        Read Article 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </span>
+                </div>
+            </a>
+
+            <!-- Blog Post 2: Autonomous Navigation -->
+            <a href="autonomous-navigation-post.html" class="blog-card">
+                <div class="blog-card-media">
+                    <img src="assets/blog/autonomous-navigation/rviz.png" alt="Rviz mapping visualization">
+                </div>
+                <div class="blog-card-content">
+                    <span class="blog-date">May 2026</span>
+                    <h2 class="blog-title">Autonomous Robot Navigation</h2>
+                    <p class="blog-excerpt">Creating and testing advanced path planning and control methods for a TurtleBot3 robot in a Gazebo simulation using A* and dynamic RRT* algorithms.</p>
+                    <div class="blog-tags">
+                        <span class="tag">SLAM</span>
+                        <span class="tag">Path Planning</span>
+                        <span class="tag">ROS</span>
+                    </div>
+                    <span class="read-more">
+                        Read Article 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M12 5l7 7-7 7"/></svg>
+                    </span>
+                </div>
+            </a>
+
+            <!-- You can easily copy/paste the <a href="..." class="blog-card">...</a> block above to add more posts later -->
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
