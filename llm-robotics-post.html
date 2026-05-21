@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Models in Robotics | Mohsen Ghasemi</title>
+
+    <meta name="description" content="Combining LLM-based decision making with physical robotic actions to perform intelligent tasks.">
+    
+    <!-- MathJax for rendering LaTeX equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']]
+          }
+        };
+    </script>
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-color); }
+
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        .back-link:hover { color: var(--accent-hover); }
+
+        /* ─── BLOG CONTENT ───────────────────────────────────────── */
+        .blog-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .blog-header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .blog-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h2 { font-size: 2rem; margin: 3rem 0 1.5rem; color: #fff; }
+        h3 { font-size: 1.5rem; margin: 2rem 0 1rem; color: #f0f0f0; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        
+        /* ─── IMAGES & MEDIA ─────────────────────────────────────── */
+        .image-wrapper {
+            margin: 2.5rem 0;
+            text-align: center;
+        }
+        
+        .image-wrapper img,
+        .image-wrapper video {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            display: block;
+            margin: 0 auto;
+        }
+
+        .image-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .image-caption {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+            font-style: italic;
+        }
+
+        /* ─── CODE & MATH ────────────────────────────────────────── */
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+        }
+
+        .math-block { margin: 2rem 0; text-align: center; font-size: 1.2rem; }
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2.2rem; }
+            h2 { font-size: 1.7rem; }
+            .image-grid-2, .image-grid-3 { grid-template-columns: 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-inner">
+        <div class="logo">Mohsen Ghasemi</div>
+        <a href="index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Portfolio
+        </a>
+      </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <main class="blog-container">
+        <header class="blog-header">
+            <h1 class="blog-title">Language Models in Robotics</h1>
+            <p>Combining LLM-based decision making with physical robotic actions for intelligent task execution.</p>
+        </header>
+
+        <section>
+            <h2>Introduction</h2>
+            <p>Large language models (LLM) encode a wealth of semantic knowledge about the world that could be extremely valuable for robots executing high-level, temporally extended instructions expressed in natural language. Therefore the question may arise: is it possible to use LLMs to make robotic tasks more intelligent? This project presents a method for combining LLM-based decision making with physical robotic actions to perform tasks that need an intelligent approach. Using chess as our domain, we demonstrate how low-level pick-and-place actions can be integrated with language models to enable a robotic arm to play chess following requested strategies, such as specific standard openings.</p>
+
+            <h2>Method</h2>
+            <p>The pipeline operates with the LLM playing as one of the players (for example, white pieces), provided with instructions to generate proper and standard moves (for example, opening the game with the London system). Additionally, it is required to provide the command in a specific framework. The command is then parsed and checked for the legality of the move, the correction of the command, and other checks; in the case of a wrong command, a feedback message is fed back to the LLM Decision maker to try again.</p>
+            <p>On the other side, the pipeline continues by interpreting human queries, generating candidate actions through an LLM, filtering these actions based on both semantic intent and game legality, and executing validated commands using a robotic arm in a simulated or real chess environment. The downstream components handle the integration architecture, where the filtered and validated commands converge at the action output text, representing the finalized textual representation of the selected action. Special cases such as board resets are also handled at this stage. This output branches into two key processing modules: a Cliport module that grounds the instruction into visual and physical features, and a Mapping module that converts the board-level move into robot-reachable 3D coordinates. The outputs from both modules are fused into low-level motion instructions, which are ultimately sent to the robotic controller for execution. The feedback loop from the legality check back to the LLM allows for iterative refinement in case of ambiguous or invalid actions, enhancing the robustness of the system.</p>
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/FlowChart_LLMForRobotics.png" alt="Flow Chart of the LLM-Robotics Pipeline">
+                <div class="image-caption">Overview of the LLM-Robotics Pipeline</div>
+            </div>
+            <h3>LLMs</h3>
+            <p>LLMs estimate the probability distribution of a text token sequence $W = \{w_0, w_1, w_2, ..., w_n\}$ by modeling the conditional probability $p(W) = \prod_{j=0}^{n} p(w_j \mid w_{<j})$. This allows the model to predict each token based on previous context. The advancement of self-attention-based neural architectures, particularly Transformers, has enabled increasingly powerful LLMs such as BERT, T5, GPT-3, and Llama, characterized by their scale and strong generalization capabilities across language tasks. In this project, the pretrained model "gpt-4o-mini" has been used through the API provided by OpenAI.</p>
+
+            <div class="code-block">
+response = openai.chat.completions.create(
+    model=LLM_MODEL,
+    messages=[
+        {"role": "system", "content": call_law_prompt},
+        {"role": "user", "content": query_prompt}
+    ], temperature=temp, max_tokens=60)
+            </div>
+
+            <p>This API call constructs a chat-based context for the model. The system message defines the role and constraints for the assistant, specifically allowing the specification of how the model answers questions. The user message supplies the dynamic content, equivalent to the queries made by the user in chatbots. The temperature parameter controls randomness in the output, with higher values allowing more exploration and lower values enforcing determinism, which is adjusted depending on whether prior failures exist. Finally, the max_tokens parameter limits the length of the response, ensuring the output is concise and in the expected format.</p>
+
+            <h3>Chess and the Decision Maker LLM</h3>
+            <p>Chess is not merely a game of tactics and rules but also one of long-term strategy and structured decision-making. A critical phase of the game is the opening, aimed at developing pieces efficiently, controlling the center, ensuring king safety, and preparing for the middlegame. In this project, we focus on guiding a robotic agent to execute structured openings by interpreting natural language prompts and integrating language model strategies with physically legal moves on a chessboard. While LLMs demonstrate impressive generalization and reasoning capabilities, they are not specialized chess engines and can occasionally produce illegal or illogical moves. These limitations necessitate the use of auxiliary systems to filter or correct model outputs and maintain the validity and integrity of gameplay.</p>
+            <p>To guide the LLM to make proper decisions and avoid illegal or illogical moves, the python-chess library is utilized. Using python-chess, we construct a carefully engineered prompt for each move. This prompt includes the full board state in FEN format and the move history, alongside a structured list of legal moves grouped by piece. It also incorporates contextual strategy guidance and provides feedback on any previous failed move attempts, supplemented by a visual description of the board to aid spatial understanding.</p>
+            <p>The LLM is instructed to respond in a strict textual format. These outputs undergo rigorous validation, involving regular expression pattern matching to ensure syntactic correctness and verification that piece names and target squares are valid identifiers. Finally, the system checks that the move strictly conforms to chess rules in the current board state. Valid commands are forwarded to robot control, while malformed or illegal commands trigger a new prompt with failure feedback.</p>
+
+            <h3>SayCan LLM and Affordance Scoring</h3>
+            <p>An alternative and complementary approach to direct command generation involves a multi-stage scoring mechanism to select the most appropriate action from a predefined set of possibilities. This method leverages both the LLM’s understanding of natural language intent and rigorous physical and rule-based validation. The affordance scoring module acts as a critical validation layer, evaluating whether a candidate action is permissible according to the rules of chess and the current physical state of the game board as represented in the PyBullet simulation.</p>
+            <p>The core functionality processes a list of candidate actions expressed in string format, parsing them to extract the specific piece intended to be moved and its proposed destination square. The system determines the color of the piece and verifies the current state of the simulation by checking whether the named piece exists within the PyBullet environment. Its actual physical position on the board is determined by comparing its 3D coordinates from the simulation with a pre-mapped set of coordinates. The system then creates a temporary copy of the current board state, isolates the validation, and checks the legality of the move using the python-chess library. If all checks succeed, the system assigns the action an affordance score of 1; if any part of the validation fails, the action is given a score of 0.</p>
+
+            <h3>Combined Scoring and Final Action Selection</h3>
+            <p>To assess the alignment between potential actions and the user's command, the system uses the LLM to evaluate how well each predefined action fits as a response to the user’s input query. The system extracts log probabilities for each token the model produces and normalizes these raw scores to a [0, 1] range. The final decision on which action to execute is made by integrating the LLM interpretation of the user's intent with the physical and rule-based validity check.</p>
+
+            <div class="math-block">
+                $$ \text{Combined Score} = \text{Normalized LLM Score} \times \text{Affordance Score} $$
+            </div>
+
+            <p>This scoring mechanism guarantees that any action deemed invalid by the affordance check is automatically excluded from consideration, regardless of how strongly the LLM favored it. The system selects the action with the highest positive combined score for execution. This structured sequence demonstrates the system's capacity to interpret varied user instructions, validate them against game rules and physical state, and select appropriate robotic actions.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/wp4d4.png" alt="LLM Scoring for White Pawn to d4">
+                <div class="image-caption">Scoring for query "Move white Pawn ... to d4". The 'Norm LLM' bars show the LLM's preference, 'Affordance' bars filter options, and 'Combined' leads to the selection.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/bp5e5.png" alt="LLM Scoring for Black Pawn to e5">
+                <div class="image-caption">Scoring for query "Move black Pawn ... to e5". The system correctly identifies and selects the move by combining LLM intent with affordance validation.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/capture.png" alt="LLM Scoring for Capture Move">
+                <div class="image-caption">Scoring for capture query "White pawn d4 captures e5". The chosen option correctly reflects a legal capture for White.</div>
+            </div>
+
+            <h3>LLM and Robotics Arm Integration</h3>
+            <p>To bridge the gap between natural language high-level actions and robotic execution, the structured text command requires translation. The translation process begins by splitting the command at the keyword "and" to extract the pick and place targets. The system then identifies known objects or locations from pre-registered dictionaries, retrieves the specific 3D coordinates for the identified entities, and generates an action dictionary containing pick and place keys with their associated position vectors. This design restricts vocabulary to valid, environment-specific terms, ensuring actions correspond directly to tangible entities in the workspace.</p>
+
+            <h3>CLIPORT Implementation</h3>
+            <p>Another effective approach for command to action translation is CLIPORT. This model is designed to interpret natural language instructions alongside visual input from a camera to perform robotic manipulation tasks. To improve spatial understanding, the visual input is augmented with coordinate channels, providing the model with explicit positional context alongside visual and textual cues. The successful operation of Cliport relies on pre-trained models, utilizing a pre-trained CLIP model to encode textual instructions and a TransporterNets architecture initialized with pre-trained weights for the manipulation logic.</p>
+            <p>To train Cliport for the specific task of moving chess pieces, a dataset of demonstrations was generated using a scripted policy. The simulation environment is reset with a configuration of chess pieces, and for each action, a top-down camera image is captured and resized to 224 by 224 pixels. The 3D pick and place coordinates from the scripted policy are then converted to 2D pixel coordinates, and each sample is accumulated and saved into a single pickle file targeting an 8,000 sample size.</p>
+
+            <div class="code-block">
+pick_loss = jnp.mean(optax.softmax_cross_entropy(
+    logits=pick_logits,
+    labels=batch['pick_onehot']))
+
+place_loss = jnp.mean(optax.softmax_cross_entropy(
+    logits=place_logits,
+    labels=batch['place_onehot']))
+
+loss = pick_loss + place_loss
+            </div>
+
+            <p>During training, batches of data are constructed where each item includes the normalized image concatenated with coordinate channels, the pre-computed text features, and the ground truth pixel coordinates alongside one-hot encoded maps for target locations. The Adam optimizer is used to update the model parameters based on the computed gradients across these two losses.</p>
+
+            <h2>Results and Conclusion</h2>
+            <p>The simulation environment is created using PyBullet, a physics engine that provides precise collision detection and dynamics simulation. The robotic system consists of two main components: a Universal Robots UR5e 6-degree-of-freedom robotic arm and a Robotiq 2F85 Gripper attached to the end-effector. Two camera views—a perspective side-view camera and an orthographic top-view camera—are configured for observation and visual feedback.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/board%20set%20up.png" alt="PyBullet Simulation Environment Setup">
+                <div class="image-caption">Environment configuration showing the UR5e Arm and chessboard.</div>
+            </div>
+
+            <p>The robotic arm performs pick-and-place operations using a strictly defined motion sequence. It begins by hovering over the source position before moving down to grasp the piece. After returning to the hover height, it navigates to the target position, lowers until contact is detected, releases the gripper, and safely returns to its home position.</p>
+
+            <div class="image-wrapper">
+                <div class="image-grid-2">
+                    <img src="assets/blog/llm-robotics/pick%20example.jpg" alt="Robotic arm picking a chess piece">
+                    <img src="assets/blog/llm-robotics/place%20example.jpg" alt="Robotic arm placing a chess piece">
+                </div>
+                <div class="image-caption">Pick and Place action example executed by the UR5e arm.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <video src="assets/blog/llm-robotics/Probablistic_Action_Selection.mp4" autoplay loop muted playsinline controls></video>
+                <div class="image-caption">Probabilistic Action Selection in the Robotic System.</div>
+            </div>
+
+            <p>The results indicated that the LLM could successfully follow strategic instructions for specific chess openings, such as the Giuoco Piano, London System, and Nimzowitsch Defense. However, its performance tended to be less consistent as the game progressed into more complex middlegame and endgame scenarios, largely because the LLM is not a specialized chess engine.</p>
+
+            <div class="image-wrapper">
+                <div class="image-grid-3">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-1.jpg" alt="Giuoco Piano move 1">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-2.jpg" alt="Giuoco Piano move 2">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-3.jpg" alt="Giuoco Piano move 3">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-4.jpg" alt="Giuoco Piano move 4">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-5.jpg" alt="Giuoco Piano move 5">
+                    <img src="assets/blog/llm-robotics/GiuocoPiano-6.jpg" alt="Giuoco Piano move 6">
+                </div>
+                <div class="image-caption">Giuoco Piano executed by LLM playing as white.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <video src="assets/blog/llm-robotics/PipeLineResult_Italian.mp4" autoplay loop muted playsinline controls></video>
+                <div class="image-caption">Pipeline result for the Italian Game.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <div class="image-grid-3">
+                    <img src="assets/blog/llm-robotics/London-1.jpg" alt="London system move 1">
+                    <img src="assets/blog/llm-robotics/London-2.jpg" alt="London system move 2">
+                    <img src="assets/blog/llm-robotics/London-3.jpg" alt="London system move 3">
+                    <img src="assets/blog/llm-robotics/London-4.jpg" alt="London system move 4">
+                    <img src="assets/blog/llm-robotics/London-5.jpg" alt="London system move 5">
+                    <img src="assets/blog/llm-robotics/London-6.jpg" alt="London system move 6">
+                </div>
+                <div class="image-caption">London system executed by LLM playing as white.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <video src="assets/blog/llm-robotics/PipeLineResult_London.mp4" autoplay loop muted playsinline controls></video>
+                <div class="image-caption">Pipeline result for the London System.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <div class="image-grid-3">
+                    <img src="assets/blog/llm-robotics/nimzo-1.jpg" alt="Nimzowitsch Defense move 1">
+                    <img src="assets/blog/llm-robotics/nimzo-2.jpg" alt="Nimzowitsch Defense move 2">
+                    <img src="assets/blog/llm-robotics/nimzo-3.jpg" alt="Nimzowitsch Defense move 3">
+                    <img src="assets/blog/llm-robotics/nimzo-4.jpg" alt="Nimzowitsch Defense move 4">
+                    <img src="assets/blog/llm-robotics/nimzo-5.jpg" alt="Nimzowitsch Defense move 5">
+                    <img src="assets/blog/llm-robotics/nimzo-6.jpg" alt="Nimzowitsch Defense move 6">
+                </div>
+                <div class="image-caption">Nimzowitsch–Larsen Attack executed by LLM playing as white.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <video src="assets/blog/llm-robotics/PipeLineResult_Nimzo.mp4" autoplay loop muted playsinline controls></video>
+                <div class="image-caption">Pipeline result for the Nimzowitsch–Larsen Attack.</div>
+            </div>
+
+            <p>The affordance scoring mechanism significantly enhances the reliability and intelligence of the robotic system by grounding outputs, preventing impossible actions, and reducing errors.</p>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/Cliport%20Data.png" alt="Training dataset used for CLIPORT">
+                <div class="image-caption">Training dataset sample used for CLIPORT piece differentiation.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/Pick%20and%20place%20height%20map.png" alt="Height map for pick and place">
+                <div class="image-caption">Height map used for the pick-and-place task visualization.</div>
+            </div>
+
+            <div class="image-wrapper">
+                <img src="assets/blog/llm-robotics/Cliport%20test.png" alt="Task execution using trained CLIPORT">
+                <div class="image-caption">Task execution using the trained CLIPORT model.</div>
+            </div>
+
+            <p>Overall, experiments with CLIPORT successfully executed the task of positioning a limited set of visually distinct chess pieces on the board after being trained on the dataset. This project demonstrated the promising potential of LLMs to enhance robotic intelligence and facilitate more natural human-robot interaction, while also highlighting current limitations when dealing with highly complex, specialized domains like chess.</p>
+
+            <div class="image-wrapper">
+                <video src="assets/blog/llm-robotics/Cliport Inegration.mp4" autoplay loop muted playsinline controls></video>
+                <div class="image-caption">Integration of CLIPORT with the robotic system.</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
