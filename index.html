@@ -117,7 +117,7 @@
             max-height: 0;
             transition: max-height 0.35s ease;
         }
-        .mobile-menu.open { max-height: 300px; }
+        .mobile-menu.open { max-height: 350px; }
         .mobile-menu a {
             display: flex;
             align-items: center;
@@ -459,6 +459,7 @@
         <!-- Desktop links -->
         <div class="nav-links">
             <a href="#projects">Projects</a>
+            <a href="#thesis">Thesis</a>
             <a href="blog.html">Blog</a>
             <a href="#skills">Skills</a>
             <a href="#contact">Contact</a>
@@ -486,6 +487,7 @@
     <!-- Mobile drawer -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#projects" class="mobile-link">Projects</a>
+        <a href="#thesis" class="mobile-link">Thesis</a>
         <a href="blog.html" class="mobile-link">Blog</a>
         <a href="#skills" class="mobile-link">Skills</a>
         <a href="#contact" class="mobile-link">Contact</a>
@@ -724,13 +726,6 @@
                         </a>
                         <a href="https://github.com/shahin1009/LLMChess" class="action-btn secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
 
-                        <!-- <a href="/2026/05/20/language-models-in-robotics.html" class="action-btn primary">
-                            Read Blog Post
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                            </svg>
-                        </a> -->
-
                         <a href="llm-robotics-post.html" class="action-btn primary">
                             Blog Post
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
@@ -767,6 +762,33 @@
                 </div>
             </div>
 
+        </div>
+    </section>
+
+    <!-- ── Thesis Section ────────────────────────────────────────── -->
+    <section class="projects-section" id="thesis">
+        <h2 class="section-title">Thesis</h2>
+        <div class="card reveal">
+            <div class="card-content">
+                <h3 class="card-title">MIMO Feedback ANC System</h3>
+                <p class="card-desc">For my thesis, I developed a MIMO (Multiple-Input Multiple-Output) feedback Active Noise Cancellation (ANC) system integrated with passive solutions for mitigating radiated noise from enclosures.</p>
+                <p class="card-desc"><em>Note: Due to an ongoing patent submission, the physical setup and specific solution are not visually disclosed. However, the videos below demonstrate the system's performance—showcasing real-time sound attenuation, frequency tracking plots, and a comparison of the error microphone signal against the noise source signal.</em></p>
+                <div class="card-tags">
+                    <span class="tag">Active Noise Cancellation</span>
+                    <span class="tag">Control Systems</span>
+                    <span class="tag">MIMO</span>
+                    <span class="tag">Signal Processing</span>
+                </div>
+            </div>
+            <!-- Video Grid -->
+            <div class="card-media" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2px; background-color: #0a0a0a; padding: 2px;">
+                <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
+                    <video src="assets/Images/Thesis/1.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+                </div>
+                <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
+                    <video src="assets/Images/Thesis/2.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+                </div>
+            </div>
         </div>
     </section>
 
