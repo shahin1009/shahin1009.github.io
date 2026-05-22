@@ -13,6 +13,11 @@
     <!-- Replace with a real preview image path when available -->
     <meta property="og:image" content="assets/Images/Siteimages/1401-06-28 18.22.36.jpg">
 
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         /* --- CSS VARIABLES & RESET --- */
         :root {
@@ -34,10 +39,25 @@
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
 
         a { text-decoration: none; color: inherit; }
+
+        /* Custom Global Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
+        }
 
         /* ─── NAVIGATION ─────────────────────────────────────────── */
         nav {
@@ -144,6 +164,14 @@
 
         .hero-text { flex: 1; }
         .hero h1 { font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 1.5rem; }
+        
+        .text-gradient {
+            background: linear-gradient(90deg, #e0e0e0 0%, var(--accent-color) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
         .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
 
         .hero-cta {
@@ -249,6 +277,14 @@
             padding: 0.3rem 0.75rem;
             border-radius: 20px;
             border: 1px solid rgba(14, 165, 233, 0.2);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+        .skill-pill:hover {
+            background: rgba(14, 165, 233, 0.2);
+            border-color: var(--accent-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(14, 165, 233, 0.15);
         }
 
         /* ─── PROJECTS SECTION ───────────────────────────────────── */
@@ -361,6 +397,24 @@
         .action-btn svg { width: 18px; height: 18px; margin-left: 6px; transition: transform 0.2s ease; }
         .action-btn:hover svg { transform: translateX(4px); }
 
+        /* Thesis Card Desktop Layout */
+        @media (min-width: 769px) {
+            .thesis-card {
+                flex-direction: row;
+                align-items: stretch;
+            }
+            .thesis-card .card-content {
+                flex: 1;
+                justify-content: center;
+                padding-right: 3rem;
+            }
+            .thesis-card .card-media {
+                flex: 1;
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto auto;
+            }
+        }
+
         /* ─── CONTACT SECTION ────────────────────────────────────── */
         .contact-section {
             max-width: 1200px;
@@ -393,6 +447,64 @@
             border-top: 1px solid var(--border-color);
             color: var(--text-muted);
             font-size: 0.9rem;
+        }
+
+        /* ─── LIGHTBOX ───────────────────────────────────────────── */
+        .lightbox {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1000; /* Sit on top of everything */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            z-index: 1001;
+        }
+
+        .lightbox-close:hover {
+            color: var(--accent-color);
+        }
+
+        /* Add a pointer cursor to all portfolio images to indicate they are clickable */
+        .img-wrapper img {
+            cursor: zoom-in;
         }
 
         /* ─── SCROLL REVEAL ──────────────────────────────────────── */
@@ -508,7 +620,7 @@
     <!-- ── Hero ──────────────────────────────────────────────────── -->
     <header class="hero" id="about">
         <div class="hero-text">
-            <h1>Hi, I'm Mohsen. <br>I am a Mechanical Engineer.</h1>
+            <h1>Hi, I'm Mohsen. <br><span class="text-gradient">I am a Mechanical Engineer.</span></h1>
             <p>Passionate about designing and building innovative mechanical systems and solving complex engineering problems.</p>
             <div class="hero-cta">
                 <a href="#projects" class="cta-btn primary">
@@ -701,6 +813,13 @@
                         <span class="tag">IMU</span>
                         <span class="tag">Sensors</span>
                     </div>
+
+                    <div class="card-actions">
+                        <a href="https://drive.google.com/file/d/1w8ohxrjnqqfAbSBpBuFkAe6lciexNH7p/view?usp=share_link" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
                 </div>
             </div>
 
@@ -768,7 +887,7 @@
     <!-- ── Thesis Section ────────────────────────────────────────── -->
     <section class="projects-section" id="thesis">
         <h2 class="section-title">M.Sc Thesis</h2>
-        <div class="card reveal">
+        <div class="card reveal thesis-card">
             <div class="card-content">
                 <h3 class="card-title">MIMO Feedback ANC System</h3>
                 <p class="card-desc">For my thesis, I developed a MIMO (Multiple-Input Multiple-Output) feedback Active Noise Cancellation (ANC) system integrated with passive solutions for mitigating radiated noise from enclosures.</p>
@@ -781,7 +900,7 @@
                 </div>
             </div>
             <!-- Video Grid -->
-            <div class="card-media" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2px; background-color: #0a0a0a; padding: 2px;">
+            <div class="card-media" style="display: grid; gap: 2px; background-color: #0a0a0a; padding: 2px;">
                 <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
                     <video src="assets/Images/Thesis/1.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
                 </div>
@@ -813,6 +932,12 @@
             </div>
         </div>
     </section>
+
+    <!-- ── Lightbox Modal ────────────────────────────────────────── -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" alt="Fullscreen Image">
+    </div>
 
     <!-- ── Footer ────────────────────────────────────────────────── -->
     <footer>
@@ -849,6 +974,29 @@
         }, { threshold: 0.12 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // ── Lightbox Logic ────────────────────────────────────────────
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const allImages = document.querySelectorAll('.img-wrapper img');
+
+        // Open lightbox on image click
+        allImages.forEach(img => {
+            img.addEventListener('click', () => {
+                lightbox.classList.add('active');
+                lightboxImg.src = img.src;
+                lightboxImg.alt = img.alt || 'Fullscreen Image';
+            });
+        });
+
+        // Close lightbox when clicking the 'X' or anywhere on the dark background
+        lightbox.addEventListener('click', (e) => {
+            if (e.target !== lightboxImg) {
+                lightbox.classList.remove('active');
+                // Clear the src after transition so it doesn't flash the old image next time
+                setTimeout(() => { lightboxImg.src = ''; }, 300); 
+            }
+        });
     </script>
 
 </body>
