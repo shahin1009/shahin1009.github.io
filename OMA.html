@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structural Health Monitoring | Mohsen Ghasemi</title>
+
+    <meta name="description" content="Correlating modal parameters to damage levels using NExT, Ibrahim Time Domain, and FDD methods.">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']]
+          }
+        };
+    </script>
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-color); }
+
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        .back-link:hover { color: var(--accent-hover); }
+
+        /* ─── BLOG CONTENT ───────────────────────────────────────── */
+        .blog-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .blog-header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h2 { font-size: 2rem; margin: 3rem 0 1.5rem; color: #fff; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; }
+        h3 { font-size: 1.5rem; margin: 2rem 0 1rem; color: #f0f0f0; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        ul { margin-bottom: 1.5rem; padding-left: 1.5rem; color: var(--text-muted); font-size: 1.1rem; }
+        li { margin-bottom: 0.5rem; }
+
+        /* ─── SLIDER STYLES ──────────────────────────────────────── */
+        .slider-wrapper {
+            position: relative;
+            max-width: 100%;
+            margin: 3rem auto;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .slides-track {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+            cursor: grab;
+        }
+
+        .slides-track:active {
+            cursor: grabbing;
+        }
+
+        .slide-img {
+            width: 100%;
+            flex-shrink: 0;
+            pointer-events: none;
+            object-fit: contain;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(14, 165, 233, 0.8);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease, transform 0.2s ease;
+            z-index: 10;
+        }
+
+        .slider-btn:hover { background: var(--accent-hover); transform: translateY(-50%) scale(1.1); }
+        .slider-btn.prev { left: 15px; }
+        .slider-btn.next { right: 15px; }
+
+        .slider-caption {
+            text-align: center;
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            margin-top: -1.5rem;
+            margin-bottom: 3rem;
+            font-style: italic;
+        }
+
+        /* ─── CODE & MATH ────────────────────────────────────────── */
+        .math-block { margin: 2rem 0; text-align: center; font-size: 1.2rem; overflow-x: auto; color: #d4d4d4;}
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-title { font-size: 2.2rem; }
+            h2 { font-size: 1.7rem; }
+            .slider-btn { width: 35px; height: 35px; font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+      <div class="nav-inner">
+        <div class="logo">Mohsen Ghasemi</div>
+        <a href="blog.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Blog
+        </a>
+      </div>
+    </nav>
+
+    <main class="blog-container">
+        <header class="blog-header">
+            <h1 class="blog-title">Structural Health Monitoring</h1>
+            <p>Correlating modal parameters to damage levels using advanced modal analysis techniques.</p>
+        </header>
+
+        <div class="slider-wrapper">
+            <div class="slides-track" id="slideTrack">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-01.png" alt="Slide 1" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-02.png" alt="Slide 2" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-03.png" alt="Slide 3" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-04.png" alt="Slide 4" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-05.png" alt="Slide 5" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-06.png" alt="Slide 6" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-07.png" alt="Slide 7" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-08.png" alt="Slide 8" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-09.png" alt="Slide 9" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-10.png" alt="Slide 10" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-11.png" alt="Slide 11" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-12.png" alt="Slide 12" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-13.png" alt="Slide 13" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-14.png" alt="Slide 14" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-15.png" alt="Slide 15" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-16.png" alt="Slide 16" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-17.png" alt="Slide 17" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-18.png" alt="Slide 18" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-19.png" alt="Slide 19" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-20.png" alt="Slide 20" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-21.png" alt="Slide 21" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-22.png" alt="Slide 22" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-23.png" alt="Slide 23" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-24.png" alt="Slide 24" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-25.png" alt="Slide 25" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-26.png" alt="Slide 26" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-27.png" alt="Slide 27" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-28.png" alt="Slide 28" class="slide-img">
+                <img src="assets/blog/oma/Data_Analysis_Slids_-29.png" alt="Slide 29" class="slide-img">
+
+            </div>
+            
+            <button class="slider-btn prev" onclick="moveSlide(-1)" aria-label="Previous Slide">&#10094;</button>
+            <button class="slider-btn next" onclick="moveSlide(1)" aria-label="Next Slide">&#10095;</button>
+        </div>
+        <div class="slider-caption">Swipe or click the arrows to view the project presentation slides.</div>
+
+        <section>
+            <h2>Introduction</h2>
+            <p>The primary aim of this project was to establish a correlation between the modal parameters of a structural component subjected to external excitation and its specific level of damage. The analysis utilized a dataset encompassing three distinct structural health conditions: a healthy state used for baseline comparison, a first damaged condition, and a second damaged condition.</p>
+
+            <h2>The Natural Excitation Technique (NExT)</h2>
+            <p>The Natural Excitation Technique (NExT) utilizes the time response to a random input to uncover the system's response to an impulse, which inherently contains necessary modal information. The foundational assumption is that the input consists of white random noise.</p>
+            <p>This technique employs auto and cross-correlations of response signals recorded at various measurement points to compute the modal parameters. Accelerometers were placed at specific relative distances along the structure: $\xi_1 = L/20$, $\xi_2 = L/3$, $\xi_3 = L/2$, and $\xi_4 = L/10$. The starting point for this analysis is the modal model of the system, represented as a linear system with uncoupled modes.</p>
+
+            <h2>The Ibrahim Time Domain Method</h2>
+            <p>The Ibrahim Time Domain method was used to extract modal parameters—including natural frequencies, damping ratios, and mode shapes—directly from time-domain response data. The computational procedure involves several sequential steps:</p>
+            <ul>
+                <li>Compute $h(t)$ as an auto-cross correlation matrix.</li>
+                <li>Compute the Hankel matrix $H(t)$ and shift it by a time step $\Delta t$.</li>
+                <li>Compute the product between the shifted matrix $H(t+\Delta t)$ and the pseudoinverse of $H(t)$.</li>
+                <li>Solve the eigenvalue problem and perform stability analysis.</li>
+                <li>Derive the mode shapes and damping from $\tilde{\Psi}$ and $S_r$, repeating previous steps by changing the size of $H(t)$ (number of rows representing the system order) to check for stable eigenfrequencies.</li>
+            </ul>
+
+            <div class="math-block">
+                $$ [H_{mn}(t+\Delta t)][H_{mn}(t)]^{+} = [\tilde{\Psi}][e^{s_{r}\Delta t}][\tilde{\Psi}]^{+} $$
+            </div>
+
+            <h2>Data Processing and Stability Analysis</h2>
+            <p>During data processing, power spectra were evaluated utilizing a 30-second Hanning window with a 50% overlap. The damaged data revealed extra frequency peaks that were not present in the healthy baseline. To produce cleaned data, nonstationary parts of the signals were actively removed.</p>
+            <p>Frequency stability diagrams were employed to find the best compromise for the number of instances evaluated:</p>
+            <ul>
+                <li>Healthy state (Sana): 2000 instances.</li>
+                <li>First damage state (Danno 1): 2000 instances.</li>
+                <li>Second damage state (Danno 2): 800 instances.</li>
+            </ul>
+            <p>Applying Singular Value Decomposition (SVD) helped to rule out scattered poles caused by noise, leading to a faster and more concentrated computational process.</p>
+
+            <h2>Frequency Domain Decomposition (FDD)</h2>
+            <p>As an additional analytical approach, the Frequency Domain Decomposition (FDD) method was applied. The algorithm consists of the following workflow:</p>
+            <ul>
+                <li>Compute the Power Spectral Density (PSD) matrix for each frequency.</li>
+                <li>Perform Singular Value Decomposition (SVD) on the PSD matrix.</li>
+                <li>Identify peaks in the first principal component to extract the eigenfrequencies.</li>
+                <li>Extract mode shapes from the corresponding singular vectors.</li>
+                <li>Estimate damping ratios using a Single Degree of Freedom (SDOF) fit.</li>
+            </ul>
+
+            <h2>Findings and Conclusions</h2>
+            <p>Analysis of the Modal Assurance Criterion (MAC) and natural frequencies revealed varying sensitivities across the structural modes. Higher mode numbers, corresponding to higher frequencies, tended to be more sensitive to structural changes and damage. Furthermore, a general increase in structural damping was observed in the damaged states.</p>
+            <p>Irregularities in parameter variation were noted; for instance, Mode 4 changed significantly in the first damage state, likely due to environmental damage or computational errors. Ultimately, environmental and operational variations must be carefully accounted for. Because errors in the applied mathematical methods can lead to differing results, implementing a statistical pattern recognition approach and actively removing outliers is necessary when operating in an uncontrolled environment.</p>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const track = document.getElementById('slideTrack');
+        let currentIndex = 0;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let isDragging = false;
+
+        const slides = Array.from(track.children);
+
+        function moveSlide(direction) {
+            currentIndex += direction;
+            if (currentIndex < 0) currentIndex = slides.length - 1;
+            if (currentIndex >= slides.length) currentIndex = 0;
+            setPositionByIndex();
+        }
+
+        function setPositionByIndex() {
+            currentTranslate = currentIndex * -track.clientWidth;
+            prevTranslate = currentTranslate;
+            track.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        // Handle Window Resizing
+        window.addEventListener('resize', () => {
+            setPositionByIndex();
+        });
+
+        // Touch/Swipe Events
+        track.addEventListener('touchstart', touchStart);
+        track.addEventListener('touchend', touchEnd);
+        track.addEventListener('touchmove', touchMove);
+        track.addEventListener('mousedown', touchStart);
+        track.addEventListener('mouseup', touchEnd);
+        track.addEventListener('mouseleave', () => { if (isDragging) touchEnd() });
+        track.addEventListener('mousemove', touchMove);
+
+        function touchStart(event) {
+            isDragging = true;
+            startPos = getPositionX(event);
+            track.style.cursor = 'grabbing';
+            // Disable transition for instantaneous tracking
+            track.style.transition = 'none'; 
+        }
+
+        function touchMove(event) {
+            if (isDragging) {
+                const currentPosition = getPositionX(event);
+                currentTranslate = prevTranslate + currentPosition - startPos;
+                track.style.transform = `translateX(${currentTranslate}px)`;
+            }
+        }
+
+        function touchEnd() {
+            isDragging = false;
+            const movedBy = currentTranslate - prevTranslate;
+            track.style.cursor = 'grab';
+            // Re-enable smooth transition
+            track.style.transition = 'transform 0.3s ease-in-out';
+            
+            if (movedBy < -100 && currentIndex < slides.length - 1) currentIndex += 1;
+            if (movedBy > 100 && currentIndex > 0) currentIndex -= 1;
+            setPositionByIndex();
+        }
+
+        function getPositionX(event) {
+            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+        }
+    </script>
+</body>
+</html>
