@@ -13,7 +13,6 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
@@ -33,33 +32,28 @@
 
         html { scroll-behavior: smooth; }
 
-        /* Elegant Page Fade-In */
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.6;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            opacity: 0;
-            animation: fadeInPage 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes fadeInPage {
-            to { opacity: 1; }
         }
 
         a { text-decoration: none; color: inherit; }
 
         /* Custom Global Scrollbar */
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: var(--bg-color); }
-        ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--accent-color); }
-
-        /* --- PERFORMANCE: CONTENT VISIBILITY --- */
-        /* Skips rendering off-screen sections until scrolled near */
-        .skills-section, .projects-section, .contact-section {
-            content-visibility: auto;
-            contain-intrinsic-size: 1000px;
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-color);
         }
 
         /* ─── NAVIGATION ─────────────────────────────────────────── */
@@ -177,7 +171,11 @@
 
         .hero p { font-size: 1.25rem; color: var(--text-muted); max-width: 600px; margin-bottom: 2rem; }
 
-        .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
         .cta-btn {
             display: inline-flex;
             align-items: center;
@@ -188,14 +186,25 @@
             border-radius: 10px;
             transition: all 0.25s ease;
         }
-        .cta-btn.primary { background: var(--accent-color); color: #fff; }
+        .cta-btn.primary {
+            background: var(--accent-color);
+            color: #fff;
+        }
         .cta-btn.primary:hover {
             background: var(--accent-hover);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(14, 165, 233, 0.35);
         }
-        .cta-btn.outline { background: transparent; color: var(--text-main); border: 1px solid var(--border-color); }
-        .cta-btn.outline:hover { border-color: var(--accent-color); color: var(--accent-color); transform: translateY(-2px); }
+        .cta-btn.outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+        .cta-btn.outline:hover {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+            transform: translateY(-2px);
+        }
 
         /* Profile picture */
         .hero-image { flex-shrink: 0; }
@@ -211,7 +220,7 @@
         .profile-pic:hover { transform: scale(1.05); }
 
         /* ─── SKILLS SECTION ─────────────────────────────────────── */
-        .skills-section, .projects-section, .contact-section {
+        .skills-section {
             max-width: 1200px;
             margin: 0 auto 6rem auto;
             padding: 0 5%;
@@ -237,7 +246,10 @@
             padding: 1.5rem;
             transition: transform 0.3s ease, border-color 0.3s ease;
         }
-        .skill-group:hover { transform: translateY(-4px); border-color: var(--accent-color); }
+        .skill-group:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-color);
+        }
 
         .skill-group-label {
             font-size: 0.75rem;
@@ -248,7 +260,12 @@
             margin-bottom: 1rem;
         }
 
-        .skill-pills { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .skill-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
         .skill-pill {
             background: rgba(14, 165, 233, 0.1);
             color: var(--text-main);
@@ -268,6 +285,12 @@
         }
 
         /* ─── PROJECTS SECTION ───────────────────────────────────── */
+        .projects-section {
+            max-width: 1200px;
+            margin: 0 auto 6rem auto;
+            padding: 0 5%;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
@@ -283,13 +306,15 @@
             flex-direction: column;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3); }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
 
         /* Media layouts */
         .card-media { display: grid; gap: 2px; background-color: #0a0a0a; }
-        .card-media img, .card-media video { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .img-wrapper { overflow: hidden; width: 100%; height: 100%; position: relative; }
-        .img-wrapper img { cursor: zoom-in; }
 
         .card:hover .media-collage img,
         .card:hover .media-single img { transform: scale(1.03); }
@@ -299,29 +324,48 @@
 
         .media-single  { grid-template-columns: 1fr; grid-template-rows: 320px; }
         .media-single2 { grid-template-columns: 1fr; grid-template-rows: 420px; }
+        .media-single3 { grid-template-columns: 1fr; grid-template-rows: 240px; }
 
+        /* Updated Scroller CSS */
         .media-scroller {
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             height: 420px;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
             cursor: grab; 
         }
-        .media-scroller::-webkit-scrollbar { display: none; }
-        .media-scroller:active { cursor: grabbing; }
+        .media-scroller::-webkit-scrollbar { 
+            display: none; 
+        }
+        .media-scroller:active {
+            cursor: grabbing;
+        }
         .media-scroller .img-wrapper {
             flex: 0 0 100%;
             min-width: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
         }
-        .card-media.media-scroller img { object-fit: contain; background-color: #0a0a0a; }
 
-        .media-natural { grid-template-columns: 1fr; grid-template-rows: auto; background-color: transparent; }
-        .media-natural img { object-fit: contain; height: auto; max-height: 350px; }
+        /* Contain logic for scroller specifically */
+        .card-media.media-scroller img {
+            object-fit: contain; 
+            background-color: #0a0a0a; 
+        }
+
+        .media-natural {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            background-color: transparent; 
+        }
+        .media-natural img {
+            object-fit: contain; 
+            height: auto; 
+            max-height: 350px; 
+        }
 
         .scroll-hint {
             position: absolute;
@@ -343,6 +387,7 @@
         .card-title { font-size: 1.4rem; margin-bottom: 0.5rem; font-weight: 700; }
         .card-desc { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 1.5rem; }
 
+        /* Fixed tags — dark-theme version */
         .card-tags { display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
         .tag {
             background: rgba(14, 165, 233, 0.1);
@@ -374,22 +419,46 @@
 
         /* Thesis Card Desktop Layout */
         @media (min-width: 769px) {
-            .thesis-card { flex-direction: row; align-items: stretch; }
-            .thesis-card .card-content { flex: 1; justify-content: center; padding-right: 3rem; }
-            .thesis-card .card-media { flex: 1; grid-template-columns: 1fr; grid-template-rows: auto auto; }
+            .thesis-card {
+                flex-direction: row;
+                align-items: stretch;
+            }
+            .thesis-card .card-content {
+                flex: 1;
+                justify-content: center;
+                padding-right: 3rem;
+            }
+            .thesis-card .card-media {
+                flex: 1;
+                grid-template-columns: 1fr; 
+                grid-template-rows: auto auto;
+            }
         }
 
         /* ─── CONTACT SECTION ────────────────────────────────────── */
+        .contact-section {
+            max-width: 1200px;
+            margin: 0 auto 6rem auto;
+            padding: 0 5%;
+            text-align: center;
+        }
+
         .contact-box {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 20px;
             padding: 4rem 2rem;
-            text-align: center;
         }
+
         .contact-box h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 1rem; }
         .contact-box p { color: var(--text-muted); font-size: 1.1rem; max-width: 520px; margin: 0 auto 2.5rem auto; }
-        .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
 
         /* ─── FOOTER ─────────────────────────────────────────────── */
         footer {
@@ -402,21 +471,27 @@
 
         /* ─── LIGHTBOX ───────────────────────────────────────────── */
         .lightbox {
-            display: none;
+            display: none; /* Hidden by default */
             position: fixed;
-            z-index: 1000;
+            z-index: 1000; /* Sit on top of everything */
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
             background-color: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
             align-items: center;
             justify-content: center;
             opacity: 0;
             transition: opacity 0.3s ease;
         }
-        .lightbox.active { display: flex; opacity: 1; }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
         .lightbox-content {
             max-width: 90%;
             max-height: 90vh;
@@ -426,7 +501,11 @@
             transform: scale(0.95);
             transition: transform 0.3s ease;
         }
-        .lightbox.active .lightbox-content { transform: scale(1); }
+
+        .lightbox.active .lightbox-content {
+            transform: scale(1);
+        }
+
         .lightbox-close {
             position: absolute;
             top: 20px;
@@ -438,7 +517,15 @@
             transition: color 0.3s ease;
             z-index: 1001;
         }
-        .lightbox-close:hover { color: var(--accent-color); }
+
+        .lightbox-close:hover {
+            color: var(--accent-color);
+        }
+
+        /* Add a pointer cursor to all portfolio images to indicate they are clickable */
+        .img-wrapper img {
+            cursor: zoom-in;
+        }
 
         /* ─── SCROLL REVEAL ──────────────────────────────────────── */
         .reveal {
@@ -446,14 +533,24 @@
             transform: translateY(30px);
             transition: opacity 0.6s ease, transform 0.6s ease;
         }
-        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
         .reveal-delay-1 { transition-delay: 0.1s; }
         .reveal-delay-2 { transition-delay: 0.2s; }
         .reveal-delay-3 { transition-delay: 0.3s; }
+        .reveal-delay-4 { transition-delay: 0.4s; }
 
         /* ─── RESPONSIVE ─────────────────────────────────────────── */
         @media (max-width: 768px) {
-            .hero { flex-direction: column-reverse; text-align: center; gap: 2.5rem; margin: 4rem auto; }
+            .hero {
+                flex-direction: column-reverse;
+                text-align: center;
+                gap: 2.5rem;
+                margin: 4rem auto;
+            }
+            .hero-text { text-align: center; }
             .hero p { margin: 0 auto 2rem auto; }
             .hero h1 { font-size: 2.5rem; }
             .hero-cta { justify-content: center; }
@@ -466,17 +563,21 @@
             .grid { grid-template-columns: 1fr; }
             .media-collage { grid-template-rows: 200px 120px; }
             .media-scroller { height: 300px; }
+
             .skills-grid { grid-template-columns: 1fr 1fr; }
         }
-        @media (max-width: 480px) { .skills-grid { grid-template-columns: 1fr; } }
+
+        @media (max-width: 480px) {
+            .skills-grid { grid-template-columns: 1fr; }
+        }
     </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DJ5CEZ9NJ"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-2DJ5CEZ9NJ');
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-2DJ5CEZ9NJ');
     </script>
 </head>
 <body>
@@ -484,6 +585,7 @@
     <nav>
       <div class="nav-inner">
         <div class="logo">Portfolio</div>
+
         <div class="nav-links">
             <a href="#projects">Projects</a>
             <a href="#thesis">Thesis</a>
@@ -503,6 +605,7 @@
                 LinkedIn
             </a>
         </div>
+
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
@@ -515,6 +618,18 @@
         <a href="blog.html" class="mobile-link">Blog</a>
         <a href="#skills" class="mobile-link">Skills</a>
         <a href="#contact" class="mobile-link">Contact</a>
+        <a href="https://drive.google.com/file/d/1ee1FOOOYDMUNS10rGr-B9rjvljiyKcW2/view?usp=share_link" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            CV
+        </a>
+        <a href="https://github.com/shahin1009" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+            GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/mohsenghsmi/" target="_blank" rel="noopener noreferrer">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            LinkedIn
+        </a>
     </div>
 
     <header class="hero" id="about">
@@ -530,7 +645,7 @@
             </div>
         </div>
         <div class="hero-image">
-            <img src="assets/Images/Siteimages/1401-06-28 18.22.36.jpg" alt="Mohsen Ghasemi" class="profile-pic" fetchpriority="high">
+            <img src="assets/Images/Siteimages/1401-06-28 18.22.36.jpg" alt="Mohsen Ghasemi" class="profile-pic">
         </div>
     </header>
 
@@ -540,25 +655,35 @@
             <div class="skill-group reveal">
                 <div class="skill-group-label">Programming</div>
                 <div class="skill-pills">
-                    <span class="skill-pill">Python</span><span class="skill-pill">MATLAB</span><span class="skill-pill">C++</span>
+                    <span class="skill-pill">Python</span>
+                    <span class="skill-pill">MATLAB</span>
+                    <span class="skill-pill">C++</span>
                 </div>
             </div>
             <div class="skill-group reveal reveal-delay-1">
                 <div class="skill-group-label">Simulation & Robotics</div>
                 <div class="skill-pills">
-                    <span class="skill-pill">MuJoCo</span><span class="skill-pill">ROS</span><span class="skill-pill">Simulink</span><span class="skill-pill">Simscape</span>
+                    <span class="skill-pill">MuJoCo</span>
+                    <span class="skill-pill">ROS</span>
+                    <span class="skill-pill">Simulink</span>
+                    <span class="skill-pill">Simscape</span>
                 </div>
             </div>
             <div class="skill-group reveal reveal-delay-2">
                 <div class="skill-group-label">CAD & Design</div>
                 <div class="skill-pills">
-                    <span class="skill-pill">SolidWorks</span><span class="skill-pill">3D Printing</span><span class="skill-pill">FEA</span>
+                    <span class="skill-pill">SolidWorks</span>
+                    <span class="skill-pill">3D Printing</span>
+                    <span class="skill-pill">FEA</span>
                 </div>
             </div>
             <div class="skill-group reveal reveal-delay-3">
                 <div class="skill-group-label">AI & Machine Learning</div>
                 <div class="skill-pills">
-                    <span class="skill-pill">PyTorch</span><span class="skill-pill">Reinforcement Learning</span><span class="skill-pill">Computer Vision</span><span class="skill-pill">LLMs</span>
+                    <span class="skill-pill">PyTorch</span>
+                    <span class="skill-pill">Reinforcement Learning</span>
+                    <span class="skill-pill">Computer Vision</span>
+                    <span class="skill-pill">LLMs</span>
                 </div>
             </div>
         </div>
@@ -566,27 +691,34 @@
 
     <section class="projects-section" id="projects">
         <h2 class="section-title">Projects</h2>
+        
         <div class="grid">
+
             <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_walk-ezgif.com-gif-to-mp4-converter.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_walk-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_walk_trot-ezgif.com-gif-to-mp4-converter.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_walk_trot-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <video src="assets/Images/UnitreeA1RL/quadruped_running-ezgif.com-gif-to-mp4-converter.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/UnitreeA1RL/quadruped_running-ezgif.com-gif-to-mp4-converter.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Quadruped Locomotion</h3>
                     <p class="card-desc">Implemented a Proximal Policy Optimization (PPO) algorithm to enable a Unitree A1 quadruped robot to move at various speeds.</p>
                     <div class="card-tags">
-                        <span class="tag">Python</span><span class="tag">MuJoCo</span><span class="tag">Reinforcement Learning</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">MuJoCo</span>
+                        <span class="tag">Reinforcement Learning</span>
                     </div>
                     <div class="card-actions">
-                        <a href="https://github.com/shahin1009/QuadrupedWalkingRL" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Project</a>
+                        <a href="https://github.com/shahin1009/QuadrupedWalkingRL" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -594,23 +726,27 @@
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
-                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes3.PNG" alt="Regulation Box 3" loading="lazy" decoding="async">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes3.PNG" alt="Regulation Box 3">
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes5.PNG" alt="Regulation Box 5" loading="lazy" decoding="async">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes5.PNG" alt="Regulation Box 5">
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes6.PNG" alt="Regulation Box 6" loading="lazy" decoding="async">
+                        <img src="assets/Images/F1_Reg_vol/Regulation Boxes6.PNG" alt="Regulation Box 6">
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">F1 2026 Regulation Volumes</h3>
                     <p class="card-desc">3D CAD modelling and analysis of Formula 1 2026 regulation bounding boxes.</p>
                     <div class="card-tags">
-                        <span class="tag">SolidWorks</span><span class="tag">CAD</span>
+                        <span class="tag">SolidWorks</span>
+                        <span class="tag">CAD</span>
                     </div>
                     <div class="card-actions">
-                        <a href="https://grabcad.com/library/f1-2026-regulation-boxes-1" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Details</a>
+                        <a href="https://grabcad.com/library/f1-2026-regulation-boxes-1" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Details
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -618,21 +754,27 @@
             <div class="card reveal">
                 <div class="card-media media-scroller">
                     <div class="img-wrapper">
-                        <img src="assets/Images/ScaraDesign/Picture1.gif" alt="SCARA forward kinematics" loading="lazy" decoding="async">
+                        <img src="assets/Images/ScaraDesign/Picture1.gif" alt="SCARA forward kinematics">
                         <span class="scroll-hint">Swipe &rarr;</span>
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/ScaraDesign/InverseKine_parabolaPause_CLOSEDLINK-ezgif.com-video-to-gif-converter.gif" alt="SCARA inverse kinematics" loading="lazy" decoding="async">
+                        <img src="assets/Images/ScaraDesign/InverseKine_parabolaPause_CLOSEDLINK-ezgif.com-video-to-gif-converter.gif" alt="SCARA inverse kinematics">
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">SCARA Robot Kinematics</h3>
                     <p class="card-desc">Design and analysis of SCARA robot kinematics for precise picking and placement tasks.</p>
                     <div class="card-tags">
-                        <span class="tag">MATLAB</span><span class="tag">Simulink</span><span class="tag">Simscape</span><span class="tag">SolidWorks</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">Simulink</span>
+                        <span class="tag">Simscape</span>
+                        <span class="tag">SolidWorks</span>
                     </div>
                     <div class="card-actions">
-                        <a href="https://drive.google.com/file/d/1NT_0HA_K1z2xOYf_mAVVQ0JFdrsOrCgc/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Case Study</a>
+                        <a href="https://drive.google.com/file/d/1NT_0HA_K1z2xOYf_mAVVQ0JFdrsOrCgc/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Case Study
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -640,14 +782,16 @@
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
-                        <video src="assets/Images/SoftActuator/SoftActuatorInAction.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/SoftActuator/SoftActuatorInAction.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Soft Actuator Design</h3>
                     <p class="card-desc">Design and development of a soft hand gripper with 3 fingers for picking delicate objects. Two silicone grades were used for varying stiffness — higher friction at the surface and firmer backing for a secure grip.</p>
                     <div class="card-tags">
-                        <span class="tag">Embedded Systems</span><span class="tag">3D Printing</span><span class="tag">Control Systems</span>
+                        <span class="tag">Embedded Systems</span>
+                        <span class="tag">3D Printing</span>
+                        <span class="tag">Control Systems</span>
                     </div>
                 </div>
             </div>
@@ -655,24 +799,33 @@
             <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
-                        <video src="assets/Images/ControlLab/VID-20241231-WA0006.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/ControlLab/VID-20241231-WA0006.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/ControlLab/Picture1.jpg" alt="Control Lab setup" loading="lazy" decoding="async">
+                        <img src="assets/Images/ControlLab/Picture1.jpg" alt="Control Lab setup">
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/ControlLab/Picture2.png" alt="Control response plot" loading="lazy" decoding="async">
+                        <img src="assets/Images/ControlLab/Picture2.png" alt="Control response plot">
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Advanced Control of a 2DOF Helicopter Model</h3>
                     <p class="card-desc">Developed control strategies for a 2DOF helicopter model (Quanser Aero 2). Various sensors were utilised including an IMU and encoders.</p>
                     <p class="card-desc">Advanced Control Techniques such as Fuzzy Logic PID, MPC, Sliding Mode Control have been implemented.</p>
+                   
                     <div class="card-tags">
-                        <span class="tag">Control Systems</span><span class="tag">MATLAB</span><span class="tag">Simulink</span><span class="tag">IMU</span><span class="tag">Sensors</span>
+                        <span class="tag">Control Systems</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">Simulink</span>
+                        <span class="tag">IMU</span>
+                        <span class="tag">Sensors</span>
                     </div>
+
                     <div class="card-actions">
-                        <a href="https://drive.google.com/file/d/1w8ohxrjnqqfAbSBpBuFkAe6lciexNH7p/view?usp=share_link" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Project</a>
+                        <a href="https://drive.google.com/file/d/1w8ohxrjnqqfAbSBpBuFkAe6lciexNH7p/view?usp=share_link" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -680,19 +833,28 @@
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single2">
                     <div class="img-wrapper">
-                        <video src="assets/Images/Cliport/CLIPORT-Results.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/Cliport/CLIPORT-Results.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">LLM for Robotic Control</h3>
                     <p class="card-desc">Various strategies were developed to use large language models for robotic control tasks. The system receives a natural language command and translates it into control actions for the robot.</p>
                     <div class="card-tags">
-                        <span class="tag">Vision</span><span class="tag">PyTorch</span><span class="tag">LLMs</span>
+                        <span class="tag">Vision</span>
+                        <span class="tag">PyTorch</span>
+                        <span class="tag">LLMs</span>
                     </div>
                     <div class="card-actions">
-                        <a href="https://drive.google.com/file/d/1wIWk7dURgK1FtrRXMScqdyuVeN4pWS6M/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Project</a>
+                        <a href="https://drive.google.com/file/d/1wIWk7dURgK1FtrRXMScqdyuVeN4pWS6M/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                         <a href="https://github.com/shahin1009/LLMChess" class="action-btn secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
-                        <a href="llm-robotics-post.html" class="action-btn primary">Blog Post</a>
+
+                        <a href="llm-robotics-post.html" class="action-btn primary">
+                            Blog Post
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -700,60 +862,89 @@
             <div class="card reveal">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
-                        <video src="assets/Images/Autonomous Vehicles/Autonomous navigation.mp4" preload="none" loop muted playsinline></video>
+                        <video src="assets/Images/Autonomous Vehicles/Autonomous navigation.mp4" autoplay loop muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Autonomous Navigation</h3>
                     <p class="card-desc">Developed autonomous navigation strategies for mobile robots, enabling them to navigate complex environments without human intervention using LiDAR-based obstacle detection and decision-making.</p>
                     <div class="card-tags">
-                        <span class="tag">ROS</span><span class="tag">Linux</span><span class="tag">LiDAR</span>
+                        <span class="tag">ROS</span>
+                        <span class="tag">Linux</span>
+                        <span class="tag">LiDAR</span>
                     </div>
                     <div class="card-actions">
-                        <a href="https://drive.google.com/file/d/1XMCLrZVnpLn1rJAWmE2wVJZAoyPUdkOm/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">View Project</a>
-                        <a href="autonomous-navigation-post.html" class="action-btn primary">Blog Post</a>
+                        <a href="https://drive.google.com/file/d/1XMCLrZVnpLn1rJAWmE2wVJZAoyPUdkOm/view" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            View Project
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="autonomous-navigation-post.html" class="action-btn primary">
+                            Blog Post
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
 
+
             <div class="card reveal">
                 <div class="card-media media-scroller">
                     <div class="img-wrapper">
-                        <img src="assets/Images/DataAnalysis/Data_Analysis_Slids_-12.png" alt="Operational modal analysis plot" loading="lazy" decoding="async">
+                        <img src="assets/Images/DataAnalysis/Data_Analysis_Slids_-12.png" alt="Operational modal analysis plot">
                         <span class="scroll-hint">Swipe &rarr;</span>
                     </div>
                     <div class="img-wrapper">
-                        <img src="assets/Images/DataAnalysis/Data_Analysis_Slids_-19.png" alt="MAC plots" loading="lazy" decoding="async">
+                        <img src="assets/Images/DataAnalysis/Data_Analysis_Slids_-19.png" alt="MAC plots">
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Operational Modal Analysis</h3>
                     <p class="card-desc">Conducted operational modal analysis on a beam to identify its dynamic characteristics and mode shapes for automatic damage detection.</p>
                     <div class="card-tags">
-                        <span class="tag">MATLAB</span><span class="tag">Signal Processing</span><span class="tag">Modal Analysis</span>
+                        <span class="tag">MATLAB</span>
+                        <span class="tag">Signal Processing</span>
+                        <span class="tag">Modal Analysis</span>
                     </div>
                     <div class="card-actions">
-                        <a href="OMA.html" class="action-btn primary">Blog Post</a>
-                        <a href="https://github.com/shahin1009/ITDM" class="action-btn primary" target="_blank" rel="noopener noreferrer">Codes</a>
+                        
+                        <a href="OMA.html" class="action-btn primary">
+                            Blog Post
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="https://github.com/shahin1009/ITDM" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            Codes
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
 
+
+
             <div class="card reveal">
                 <div class="card-media media-natural">
                     <div class="img-wrapper">
-                        <img src="assets/blog/gcs/gcs_planner_output.png" alt="Graph of Convex Sets path planning output" loading="lazy" decoding="async">
+                        <img src="assets/blog/gcs/gcs_planner_output.png" alt="Graph of Convex Sets path planning output">
                     </div>
                 </div>
                 <div class="card-content">
                     <h3 class="card-title">Graph of Convex Sets Path Planning</h3>
-                    <p class="card-desc">Replicated the Graph of Convex Sets (GCS) path planning algorithm</p>
+                    <p class="card-desc">Replicated the Graph of Convex Sets (GCS) path planning algorithm </p>
                     <div class="card-tags">
-                        <span class="tag">Python</span><span class="tag">Convex Optimization</span>
+                        <span class="tag">Python</span>
+                        <span class="tag">Convex Optimization</span>
+
                     </div>
                     <div class="card-actions">
-                        <a href="gcs_post.html" class="action-btn primary">Blog Post</a>
-                        <a href="https://github.com/shahin1009/GCS" class="action-btn primary" target="_blank" rel="noopener noreferrer">Codes</a>
+                        
+                        <a href="gcs_post.html" class="action-btn primary">
+                            Blog Post
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                        <a href="https://github.com/shahin1009/GCS" class="action-btn primary" target="_blank" rel="noopener noreferrer">
+                            Codes
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -769,15 +960,18 @@
                 <p class="card-desc">For my thesis, I developed a MIMO (Multiple-Input Multiple-Output) feedback Active Noise Cancellation (ANC) system integrated with passive solutions for mitigating radiated noise from enclosures.</p>
                 <p class="card-desc"><em>Note: Due to an ongoing patent submission, the physical setup and specific solution are not visually disclosed. However, the videos below demonstrate the system's performance—showcasing real-time sound attenuation, frequency tracking plots, and a comparison of the error microphone signal against the noise source signal.</em></p>
                 <div class="card-tags">
-                    <span class="tag">Active Noise Cancellation</span><span class="tag">Control Systems</span><span class="tag">MIMO</span><span class="tag">Signal Processing</span>
+                    <span class="tag">Active Noise Cancellation</span>
+                    <span class="tag">Control Systems</span>
+                    <span class="tag">MIMO</span>
+                    <span class="tag">Signal Processing</span>
                 </div>
             </div>
             <div class="card-media" style="display: grid; gap: 2px; background-color: #0a0a0a; padding: 2px;">
                 <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
-                    <video src="assets/Images/Thesis/1.mp4" controls playsinline preload="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+                    <video src="assets/Images/Thesis/1.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
                 </div>
                 <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
-                    <video src="assets/Images/Thesis/2.mp4" controls playsinline preload="none" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
+                    <video src="assets/Images/Thesis/2.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
                 </div>
             </div>
         </div>
@@ -788,9 +982,18 @@
             <h2>Let's work together</h2>
             <p>Whether it's a robotics project, research collaboration, or just a chat — my inbox is always open.</p>
             <div class="contact-links">
-                <a href="mailto:mohsen.ghasemi@mail.polimi.it" class="cta-btn primary">Send Email</a>
-                <a href="https://www.linkedin.com/in/mohsenghsmi/" class="cta-btn outline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-                <a href="https://github.com/shahin1009" class="cta-btn outline" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="mailto:mohsen.ghasemi@mail.polimi.it" class="cta-btn primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Send Email
+                </a>
+                <a href="https://www.linkedin.com/in/mohsenghsmi/" class="cta-btn outline" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    LinkedIn
+                </a>
+                <a href="https://github.com/shahin1009" class="cta-btn outline" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+                    GitHub
+                </a>
             </div>
         </div>
     </section>
@@ -814,6 +1017,7 @@
             mobileMenu.classList.toggle('open');
         });
 
+        // Close mobile menu when a link is clicked
         document.querySelectorAll('.mobile-link').forEach(link => {
             link.addEventListener('click', () => {
                 hamburger.classList.remove('open');
@@ -833,29 +1037,12 @@
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // Smart Video Playback - Play only when visible to save bandwidth
-        const videoObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                // If the video has 'controls', we let the user handle playback manually
-                if (entry.target.hasAttribute('controls')) return; 
-
-                if (entry.isIntersecting) {
-                    entry.target.play().catch(e => console.log("Autoplay blocked:", e));
-                } else {
-                    entry.target.pause();
-                }
-            });
-        }, { threshold: 0.2 });
-
-        document.querySelectorAll('video').forEach(video => {
-            videoObserver.observe(video);
-        });
-
-        // Lightbox Logic
+        // ── Lightbox Logic ────────────────────────────────────────────
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const allImages = document.querySelectorAll('.img-wrapper img');
 
+        // Open lightbox on image click
         allImages.forEach(img => {
             img.addEventListener('click', () => {
                 lightbox.classList.add('active');
@@ -864,14 +1051,16 @@
             });
         });
 
+        // Close lightbox when clicking the 'X' or anywhere on the dark background
         lightbox.addEventListener('click', (e) => {
             if (e.target !== lightboxImg) {
                 lightbox.classList.remove('active');
+                // Clear the src after transition so it doesn't flash the old image next time
                 setTimeout(() => { lightboxImg.src = ''; }, 300); 
             }
         });
 
-        // Scroller Drag-to-Scroll Logic
+        // ── Scroller Drag-to-Scroll Logic ──────────────────────────────
         const scrollers = document.querySelectorAll('.media-scroller');
 
         scrollers.forEach(slider => {
@@ -883,27 +1072,31 @@
                 isDown = true;
                 startX = e.pageX - slider.offsetLeft;
                 scrollLeft = slider.scrollLeft;
+                // Temporarily turn off snap so the drag feels smooth
                 slider.style.scrollSnapType = 'none'; 
             });
 
             slider.addEventListener('mouseleave', () => {
                 isDown = false;
+                // Turn snap back on when mouse leaves
                 slider.style.scrollSnapType = 'x mandatory'; 
             });
 
             slider.addEventListener('mouseup', () => {
                 isDown = false;
+                // Turn snap back on when dragging finishes
                 slider.style.scrollSnapType = 'x mandatory'; 
             });
 
             slider.addEventListener('mousemove', (e) => {
-                if (!isDown) return;
+                if (!isDown) return; // Stop the fn from running if not clicked
                 e.preventDefault();
                 const x = e.pageX - slider.offsetLeft;
-                const walk = (x - startX) * 1.5;
+                const walk = (x - startX) * 1.5; // Multiplier adjusts drag speed
                 slider.scrollLeft = scrollLeft - walk;
             });
         });
     </script>
+
 </body>
 </html>
