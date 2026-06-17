@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Graph of Convex Sets: A Visual Guide | Mohsen Ghasemi</title>
+
+    <meta name="description" content="An interactive visual guide to motion planning with the Graph of Convex Sets (GCS) and IRIS algorithms.">
+    
+    <!-- MathJax for rendering LaTeX equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$']],
+            displayMath: [['$$', '$$']]
+          }
+        };
+    </script>
+
+    <style>
+        /* --- CSS VARIABLES & RESET --- */
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --text-main: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --accent-color: #0ea5e9;
+            --accent-hover: #38bdf8;
+            --border-color: #2c2c2c;
+            --nav-height: 72px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        a { text-decoration: none; color: inherit; transition: color 0.2s ease; }
+        a:hover { color: var(--accent-color); }
+
+        /* ─── NAVIGATION ─────────────────────────────────────────── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(18, 18, 18, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 5%;
+            height: var(--nav-height);
+        }
+
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo { font-size: 1.5rem; font-weight: 700; letter-spacing: -0.5px; }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        .back-link:hover { color: var(--accent-hover); }
+
+        /* ─── BLOG CONTENT ───────────────────────────────────────── */
+        .blog-container {
+            max-width: 800px;
+            margin: 4rem auto;
+            padding: 0 5%;
+        }
+
+        .blog-header {
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 2rem;
+        }
+
+        .blog-title {
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+        }
+
+        h2 { font-size: 2rem; margin: 3rem 0 1.5rem; color: #fff; }
+        h3 { font-size: 1.5rem; margin: 2rem 0 1rem; color: #f0f0f0; }
+        p { margin-bottom: 1.5rem; font-size: 1.1rem; color: var(--text-muted); }
+        ul, ol { margin-bottom: 1.5rem; padding-left: 2rem; color: var(--text-muted); font-size: 1.1rem; }
+        li { margin-bottom: 0.5rem; }
+        
+        /* ─── INTERACTIVE WIDGETS ────────────────────────────────── */
+        .widget-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2.5rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .widget-header {
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+        }
+
+        .widget-body {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .widget-controls {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .control-group label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            margin-bottom: 0.3rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: var(--accent-color);
+        }
+
+        .widget-canvas-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        canvas {
+            max-width: 100%;
+            display: block;
+        }
+
+        .widget-data {
+            font-family: monospace;
+            background: #0a0a0a;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #4ade80;
+            white-space: pre-wrap;
+        }
+
+        .btn {
+            background: var(--accent-color);
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: inherit;
+        }
+        .btn:hover { background: var(--accent-hover); }
+
+        @media (max-width: 768px) {
+            .widget-body { flex-direction: column; }
+        }
+
+        /* ─── CODE & MATH ────────────────────────────────────────── */
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            overflow-x: auto;
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: #d4d4d4;
+            line-height: 1.5;
+        }
+
+        .math-block { margin: 2rem 0; text-align: center; font-size: 1.2rem; overflow-x: auto;}
+
+        footer {
+            text-align: center;
+            padding: 2rem 5%;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+      <div class="nav-inner">
+        <div class="logo">Mohsen Ghasemi</div>
+        <a href="index.html" class="back-link">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to Portfolio
+        </a>
+      </div>
+    </nav>
+
+    <!-- Blog Content -->
+    <main class="blog-container">
+        <header class="blog-header">
+            <h1 class="blog-title">Graph of Convex Sets: A Visual Guide</h1>
+            <p>Deconstructing the beautiful math behind modern motion planning.</p>
+        </header>
+
+        <section>
+            <h2>Introduction</h2>
+            <p>Path planning for robots usually suffers from a harsh trade-off: you can either use a discrete graph search (like A* on a grid) which is fast but results in jagged, unnatural paths, or you can use continuous trajectory optimization which produces smooth, elegant paths but often gets trapped in local minimums (e.g., getting stuck behind an obstacle).</p>
+            <p>The <strong>Graph of Convex Sets (GCS)</strong> algorithm, combined with <strong>IRIS</strong> (Iterative Regional Inflation by Semidefinite programming), offers a brilliant solution. It bridges the gap by turning empty physical space into a network of overlapping, mathematically guaranteed "safe rooms". By framing the problem this way, we can use a fast discrete search to pick the sequence of rooms, and a rock-solid convex optimization to pull the path tight through those rooms. Let's break down exactly how the math makes this happen.</p>
+
+            <div class="image-wrapper">
+                <div class="image-grid-2" style="max-width: 60%; margin-left: auto; margin-right: auto;">
+                    <img src="assets/blog/gcs/gcs_planner_output.png" alt="2D Graph of Convex Sets Result" style="max-width: 100%; height: auto;">
+                    <img src="assets/blog/gcs/gcs_planner_3d_output.png" alt="3D Graph of Convex Sets Result" style="max-width: 100%; height: auto;">
+                </div>
+                <div class="image-caption">Graph of Convex Sets (GCS) smoothly finding the shortest continuous path through overlapping convex safe-regions in 2D (left) and 3D (right) environments.</div>
+            </div>
+
+            <h2>Phase 1: Growing Regions with IRIS</h2>
+            <p>Before we can navigate, we need to know where it is safe to go. Instead of looking at obstacles, IRIS looks at empty space. It picks a random seed point in the free space and inflates the largest possible convex polygon (a "room") that doesn't hit any obstacles.</p>
+            <p>To do this, it relies on an inscribed ellipse. Think of it as blowing up a balloon inside a box full of thumbtacks. We need to figure out which thumbtack the balloon will touch first, and place a mathematical "wall" in front of it.</p>
+
+            <h3>The Convex Combination</h3>
+            <p>To find the closest point on an obstacle, we don't search grid coordinates. Instead, we represent any point inside an obstacle as a <strong>convex combination</strong>—a weighted average of its corners.</p>
+            <div class="code-block">
+n = vertices.shape[0]
+lam = cp.Variable(n, nonneg=True)
+x = vertices.T @ lam
+            </div>
+            <p>By forcing the weights ($\lambda$) to be positive and sum exactly to $1$ ($\sum \lambda_i = 1$), the solver can smoothly slide these weights around to move the point $x$ anywhere inside the shape. Play with the weights below to see how adjusting the "gravity" of each corner moves the resulting point.</p>
+
+            <!-- WIDGET 1: CONVEX COMBINATION -->
+            <div class="widget-container">
+                <div class="widget-header">Interactive: Convex Combinations</div>
+                <div class="widget-body">
+                    <div class="widget-canvas-container">
+                        <canvas id="canvas1" width="300" height="300"></canvas>
+                    </div>
+                    <div class="widget-controls">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Adjust the raw weights. The system automatically normalizes them so they sum to 1.0 (100%).</p>
+                        <div class="control-group">
+                            <label><span>Weight A (λ₁)</span> <span id="val1_1"></span></label>
+                            <input type="range" id="sl1_1" min="0" max="100" value="33">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Weight B (λ₂)</span> <span id="val1_2"></span></label>
+                            <input type="range" id="sl1_2" min="0" max="100" value="33">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Weight C (λ₃)</span> <span id="val1_3"></span></label>
+                            <input type="range" id="sl1_3" min="0" max="100" value="34">
+                        </div>
+                        <div class="widget-data" id="data1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Warped Space (Mahalanobis Distance)</h3>
+            <p>When searching for that closest point on the obstacle, IRIS doesn't use standard straight-line distance. It uses a distance metric proportional to the shape of the growing ellipse.</p>
+            <div class="math-block">
+                $$ \min_{x} \| C^{-1}(x - d) \|_2^2 $$
+            </div>
+            <p>Here, $d$ is the center of the ellipse, and $C$ is the matrix defining its stretch. Multiplying by $C^{-1}$ acts as a mathematical "teleporter." It squishes the entire universe so that your stretched, skewed ellipse becomes a perfect, round unit circle. In this warped space, finding the tangent wall against the obstacle becomes trivial.</p>
+            <p>In the widget below, change the ellipse's shape. Notice how the normal vector (the red arrow defining the separating wall) shifts. The wall doesn't just point at the obstacle; it points in the direction where the <i>ellipse</i> will collide first.</p>
+
+            <!-- WIDGET 2: WARPED SPACE -->
+            <div class="widget-container">
+                <div class="widget-header">Interactive: The Separating Hyperplane</div>
+                <div class="widget-body">
+                    <div class="widget-canvas-container">
+                        <canvas id="canvas2" width="300" height="300"></canvas>
+                    </div>
+                    <div class="widget-controls">
+                        <div class="control-group">
+                            <label><span>Obstacle X-Pos</span> <span id="val2_x"></span></label>
+                            <input type="range" id="sl2_x" min="160" max="280" value="230">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Obstacle Y-Pos</span> <span id="val2_y"></span></label>
+                            <input type="range" id="sl2_y" min="20" max="140" value="60">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Ellipse Width (rx)</span> <span id="val2_rx"></span></label>
+                            <input type="range" id="sl2_rx" min="20" max="100" value="80">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Ellipse Height (ry)</span> <span id="val2_ry"></span></label>
+                            <input type="range" id="sl2_ry" min="20" max="100" value="40">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Maximum Volume Ellipse</h3>
+            <p>Once we place walls against the closest obstacles, we form a closed "room" (a polytope defined by $Ax \le b$). Now we ask the optimizer to inflate a new, even larger ellipse inside that room to find the next set of walls.</p>
+            <div class="code-block">
+for i in range(A.shape[0]):
+    constraints.append(cp.norm(C @ A[i, :]) + A[i, :] @ d <= b[i])
+            </div>
+            <p>This single constraint ensures the balloon never pops. It calculates the position of the center ($a_i^T d$) and adds the exact length of the ellipse's "bulge" pushing toward that specific wall ($\|C a_i\|$). As long as that sum is less than the wall's distance ($b_i$), the ellipse is safe.</p>
+
+            <!-- WIDGET 3: ELLIPSE BULGE -->
+            <div class="widget-container">
+                <div class="widget-header">Interactive: The Bulge Constraint</div>
+                <div class="widget-body">
+                    <div class="widget-canvas-container">
+                        <canvas id="canvas3" width="300" height="300"></canvas>
+                    </div>
+                    <div class="widget-controls">
+                        <p style="font-size: 0.9rem; color: var(--text-muted);">Adjust the ellipse shape. If the projected bulge (red line) exceeds the wall distance, the constraint is violated.</p>
+                        <div class="control-group">
+                            <label><span>Ellipse Width (rx)</span> <span id="val3_rx"></span></label>
+                            <input type="range" id="sl3_rx" min="10" max="120" value="60">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Ellipse Height (ry)</span> <span id="val3_ry"></span></label>
+                            <input type="range" id="sl3_ry" min="10" max="120" value="40">
+                        </div>
+                        <div class="control-group">
+                            <label><span>Wall Angle (deg)</span> <span id="val3_ang"></span></label>
+                            <input type="range" id="sl3_ang" min="0" max="90" value="45">
+                        </div>
+                        <div class="widget-data" id="data3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Phase 2: Graph Extraction</h2>
+            <p>After running IRIS from multiple seed points, we have a map covered in overlapping convex safe rooms. Now we transition from continuous geometry to discrete math. We build a Graph (like a subway map) where every room is a node. If two rooms physically overlap, we draw an edge connecting them.</p>
+            <p>Using a standard algorithm like Dijkstra's or A*, we can instantly find the shortest sequence of rooms from our Start position to our Goal.</p>
+
+            <h2>Phase 3: Trajectory Optimization</h2>
+            <p>We have our sequence of rooms, but how do we find the exact footsteps? If we pass through 3 rooms, we must cross through 2 doors (the overlapping intersections). The algorithm creates a CVXPY variable for every transition waypoint.</p>
+            <div class="math-block">
+                $$ \min \sum \| p_{k+1} - p_k \|_2 $$
+            </div>
+            <p>We ask the solver to minimize the total straight-line distance of the path. However, we strictly constrain Waypoint 1 to stay inside Door 1, and Waypoint 2 to stay inside Door 2. The solver effectively treats the path like a rubber band and pulls it as tight as geometrically possible through the constrained doorways.</p>
+            <p>Drag the waypoints below to try and find the shortest path manually, or click the button to let the algorithm mathematically "pull the string tight".</p>
+
+            <!-- WIDGET 4: RUBBER BAND OPTIMIZATION -->
+            <div class="widget-container" style="flex-direction: column;">
+                <div class="widget-header">Interactive: Pulling the String Tight</div>
+                <div style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <div class="widget-canvas-container" style="width: 100%; max-width: 600px; height: 250px;">
+                        <canvas id="canvas4" width="600" height="250" style="touch-action: none;"></canvas>
+                    </div>
+                    <div style="display: flex; gap: 2rem; align-items: center;">
+                        <div class="widget-data" id="data4" style="margin: 0;">Path Length: 0.00</div>
+                        <button class="btn" id="btn4_opt">Snap to Optimal</button>
+                    </div>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">Drag the two yellow waypoints. Notice they are mathematically trapped inside the overlapping regions (the blue "doors").</p>
+                </div>
+            </div>
+
+            <h2>Conclusion</h2>
+            <p>The magic of the Graph of Convex Sets is how it segregates the difficulty of path planning. The discrete combinatorial problem (which way around the tree do I go?) is handled by blazing-fast graph searches. The continuous geometric problem (how close to the tree should I step?) is solved by robust, guarantee-backed convex optimization.</p>
+            <p>By using the warped space of Mahalanobis distance to grow maximal regions, and the rubber-band tightness of Second-Order Cone Programs to refine the trajectory, GCS guarantees absolute collision avoidance while generating beautifully smooth paths.</p>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 Mohsen Ghasemi. All rights reserved. Code visualization built with HTML5 Canvas.</p>
+    </footer>
+
+    <!-- INTERACTIVE WIDGET SCRIPTS -->
+    <script>
+        // --- Utility Functions ---
+        function drawPoint(ctx, x, y, color="yellow", radius=5) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI*2);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = "#000";
+            ctx.stroke();
+        }
+
+        function drawLine(ctx, x1, y1, x2, y2, color="#fff", width=2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.strokeStyle = color;
+            ctx.lineWidth = width;
+            ctx.stroke();
+        }
+
+        // --- WIDGET 1: Convex Combination ---
+        (function() {
+            const canvas = document.getElementById('canvas1');
+            const ctx = canvas.getContext('2d');
+            const s1 = document.getElementById('sl1_1');
+            const s2 = document.getElementById('sl1_2');
+            const s3 = document.getElementById('sl1_3');
+            const v1 = document.getElementById('val1_1');
+            const v2 = document.getElementById('val1_2');
+            const v3 = document.getElementById('val1_3');
+            const data = document.getElementById('data1');
+
+            const A = {x: 150, y: 30};
+            const B = {x: 50, y: 250};
+            const C = {x: 250, y: 250};
+
+            function update() {
+                // Get raw values and normalize
+                let raw1 = parseFloat(s1.value);
+                let raw2 = parseFloat(s2.value);
+                let raw3 = parseFloat(s3.value);
+                let sum = raw1 + raw2 + raw3;
+                
+                if (sum === 0) { raw1 = 33; raw2 = 33; raw3 = 34; sum = 100; }
+
+                let l1 = raw1 / sum;
+                let l2 = raw2 / sum;
+                let l3 = raw3 / sum;
+
+                v1.innerText = (l1*100).toFixed(1) + "%";
+                v2.innerText = (l2*100).toFixed(1) + "%";
+                v3.innerText = (l3*100).toFixed(1) + "%";
+
+                let px = l1*A.x + l2*B.x + l3*C.x;
+                let py = l1*A.y + l2*B.y + l3*C.y;
+
+                data.innerText = `X = λ₁A + λ₂B + λ₃C\nX = (${px.toFixed(1)}, ${py.toFixed(1)})`;
+
+                // Draw
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Polygon
+                ctx.beginPath();
+                ctx.moveTo(A.x, A.y);
+                ctx.lineTo(B.x, B.y);
+                ctx.lineTo(C.x, C.y);
+                ctx.closePath();
+                ctx.fillStyle = "rgba(14, 165, 233, 0.2)";
+                ctx.fill();
+                ctx.strokeStyle = "rgba(14, 165, 233, 0.8)";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Vertices
+                ctx.fillStyle = "#fff";
+                ctx.font = "14px monospace";
+                ctx.fillText("A", A.x - 5, A.y - 10);
+                ctx.fillText("B", B.x - 15, B.y + 15);
+                ctx.fillText("C", C.x + 5, C.y + 15);
+                
+                drawPoint(ctx, A.x, A.y, "#fff", 3);
+                drawPoint(ctx, B.x, B.y, "#fff", 3);
+                drawPoint(ctx, C.x, C.y, "#fff", 3);
+
+                // Point X
+                drawPoint(ctx, px, py, "#eab308", 6);
+                ctx.fillStyle = "#eab308";
+                ctx.fillText("X", px + 10, py - 10);
+            }
+
+            s1.oninput = update; s2.oninput = update; s3.oninput = update;
+            update();
+        })();
+
+        // --- WIDGET 2: Separating Hyperplane ---
+        (function() {
+            const canvas = document.getElementById('canvas2');
+            const ctx = canvas.getContext('2d');
+            const sx = document.getElementById('sl2_x');
+            const sy = document.getElementById('sl2_y');
+            const srx = document.getElementById('sl2_rx');
+            const sry = document.getElementById('sl2_ry');
+            
+            const cx = 150, cy = 150; // Ellipse center
+
+            function update() {
+                let px = parseFloat(sx.value);
+                let py = parseFloat(sy.value);
+                let rx = parseFloat(srx.value);
+                let ry = parseFloat(sry.value);
+
+                document.getElementById('val2_x').innerText = px;
+                document.getElementById('val2_y').innerText = py;
+                document.getElementById('val2_rx').innerText = rx;
+                document.getElementById('val2_ry').innerText = ry;
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw Ellipse
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = "rgba(14, 165, 233, 0.2)";
+                ctx.fill();
+                ctx.strokeStyle = "rgba(14, 165, 233, 0.8)";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+                drawPoint(ctx, cx, cy, "#fff", 3); // center
+
+                // Math: Warped space normal
+                // D = (px - cx, py - cy)
+                // Cinv applies 1/rx^2 and 1/ry^2 to get the normal 'a'
+                let dx = px - cx;
+                let dy = py - cy;
+                
+                let ax = dx / (rx * rx);
+                let ay = dy / (ry * ry);
+                
+                // Normalize 'a' for drawing
+                let len = Math.sqrt(ax*ax + ay*ay);
+                let nx = ax / len;
+                let ny = ay / len;
+
+                // Tangent line is perpendicular to 'a'
+                let tx = -ny;
+                let ty = nx;
+
+                // Draw Tangent line passing through P
+                let lineLen = 150;
+                drawLine(ctx, px - tx*lineLen, py - ty*lineLen, px + tx*lineLen, py + ty*lineLen, "#a0a0a0", 2);
+
+                // Draw Normal Vector
+                let arrowLen = 40;
+                drawLine(ctx, px, py, px + nx*arrowLen, py + ny*arrowLen, "#ef4444", 3);
+                drawPoint(ctx, px + nx*arrowLen, py + ny*arrowLen, "#ef4444", 3);
+
+                // Point P
+                drawPoint(ctx, px, py, "#eab308", 6);
+            }
+
+            sx.oninput = update; sy.oninput = update; 
+            srx.oninput = update; sry.oninput = update;
+            update();
+        })();
+
+        // --- WIDGET 3: Bulge Constraint ---
+        (function() {
+            const canvas = document.getElementById('canvas3');
+            const ctx = canvas.getContext('2d');
+            const srx = document.getElementById('sl3_rx');
+            const sry = document.getElementById('sl3_ry');
+            const sang = document.getElementById('sl3_ang');
+            const data = document.getElementById('data3');
+            
+            const cx = 150, cy = 150; 
+            const wallDist = 80; // Fixed 'b'
+
+            function update() {
+                let rx = parseFloat(srx.value);
+                let ry = parseFloat(sry.value);
+                let angDeg = parseFloat(sang.value);
+                let angRad = angDeg * Math.PI / 180;
+
+                document.getElementById('val3_rx').innerText = rx;
+                document.getElementById('val3_ry').innerText = ry;
+                document.getElementById('val3_ang').innerText = angDeg + "°";
+
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Math
+                let nx = Math.cos(angRad);
+                let ny = -Math.sin(angRad); // Y inverted for canvas
+
+                // Bulge reach = sqrt((rx*cos)^2 + (ry*sin)^2)
+                let reach = Math.sqrt(Math.pow(rx * nx, 2) + Math.pow(ry * ny, 2));
+                let violation = reach > wallDist;
+
+                // Draw Ellipse
+                ctx.beginPath();
+                ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+                ctx.fillStyle = violation ? "rgba(239, 68, 68, 0.2)" : "rgba(14, 165, 233, 0.2)";
+                ctx.fill();
+                ctx.strokeStyle = violation ? "#ef4444" : "rgba(14, 165, 233, 0.8)";
+                ctx.lineWidth = 2;
+                ctx.stroke();
+
+                // Draw Wall
+                let wx = cx + nx * wallDist;
+                let wy = cy + ny * wallDist;
+                let tx = -ny;
+                let ty = nx;
+                drawLine(ctx, wx - tx*150, wy - ty*150, wx + tx*150, wy + ty*150, "#fff", 2);
+
+                // Draw Normal Axis
+                ctx.setLineDash([5, 5]);
+                drawLine(ctx, cx, cy, cx + nx*150, cy + ny*150, "#555", 1);
+                ctx.setLineDash([]);
+
+                // Draw Reach Bracket
+                drawLine(ctx, cx, cy, cx + nx*reach, cy + ny*reach, violation ? "#ef4444" : "#eab308", 4);
+                
+                drawPoint(ctx, cx, cy, "#fff", 3);
+
+                data.innerHTML = `Wall Distance (b) : ${wallDist}<br>Ellipse Bulge   : ${reach.toFixed(1)}<br>Status          : <span style="color:${violation?'#ef4444':'#4ade80'}">${violation?'VIOLATION':'SAFE'}</span>`;
+            }
+
+            srx.oninput = update; sry.oninput = update; sang.oninput = update;
+            update();
+        })();
+
+        // --- WIDGET 4: Rubber Band Optimization ---
+        (function() {
+            const canvas = document.getElementById('canvas4');
+            const ctx = canvas.getContext('2d');
+            const btn = document.getElementById('btn4_opt');
+            const data = document.getElementById('data4');
+
+            // Regions definition [x, y, w, h]
+            const r1 = {x: 40, y: 20, w: 180, h: 120};
+            const r2 = {x: 180, y: 100, w: 200, h: 130};
+            const r3 = {x: 340, y: 40, w: 220, h: 100};
+
+            // Overlaps
+            const o1 = {x: Math.max(r1.x, r2.x), y: Math.max(r1.y, r2.y), 
+                        w: Math.min(r1.x+r1.w, r2.x+r2.w) - Math.max(r1.x, r2.x), 
+                        h: Math.min(r1.y+r1.h, r2.y+r2.h) - Math.max(r1.y, r2.y)};
+            
+            const o2 = {x: Math.max(r2.x, r3.x), y: Math.max(r2.y, r3.y), 
+                        w: Math.min(r2.x+r2.w, r3.x+r3.w) - Math.max(r2.x, r3.x), 
+                        h: Math.min(r2.y+r2.h, r3.y+r3.h) - Math.max(r2.y, r3.y)};
+
+            const Start = {x: 60, y: 50};
+            const Goal = {x: 520, y: 90};
+            let wp1 = {x: o1.x + o1.w/2, y: o1.y + o1.h/2};
+            let wp2 = {x: o2.x + o2.w/2, y: o2.y + o2.h/2};
+
+            let dragging = null;
+
+            function clamp(p, rect) {
+                return {
+                    x: Math.max(rect.x, Math.min(p.x, rect.x + rect.w)),
+                    y: Math.max(rect.y, Math.min(p.y, rect.y + rect.h))
+                };
+            }
+
+            function dist(p1, p2) {
+                return Math.sqrt(Math.pow(p1.x-p2.x, 2) + Math.pow(p1.y-p2.y, 2));
+            }
+
+            function drawRect(rect, color, fill=false) {
+                if(fill) {
+                    ctx.fillStyle = color;
+                    ctx.fillRect(rect.x, rect.y, rect.w, rect.h);
+                }
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                ctx.strokeRect(rect.x, rect.y, rect.w, rect.h);
+            }
+
+            function update() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw Regions
+                drawRect(r1, "rgba(255,255,255,0.2)");
+                drawRect(r2, "rgba(255,255,255,0.2)");
+                drawRect(r3, "rgba(255,255,255,0.2)");
+
+                // Draw Overlaps (Doors)
+                drawRect(o1, "rgba(14, 165, 233, 0.4)", true);
+                drawRect(o2, "rgba(14, 165, 233, 0.4)", true);
+
+                // Draw Path
+                drawLine(ctx, Start.x, Start.y, wp1.x, wp1.y, "#ef4444", 3);
+                drawLine(ctx, wp1.x, wp1.y, wp2.x, wp2.y, "#ef4444", 3);
+                drawLine(ctx, wp2.x, wp2.y, Goal.x, Goal.y, "#ef4444", 3);
+
+                // Draw Points
+                drawPoint(ctx, Start.x, Start.y, "#22c55e", 8); // Start Green
+                drawPoint(ctx, Goal.x, Goal.y, "#22c55e", 8); // Goal Green
+                drawPoint(ctx, wp1.x, wp1.y, "#eab308", 8); // WP1 Yellow
+                drawPoint(ctx, wp2.x, wp2.y, "#eab308", 8); // WP2 Yellow
+
+                ctx.fillStyle = "#fff";
+                ctx.font = "14px sans-serif";
+                ctx.fillText("Start", Start.x - 15, Start.y - 15);
+                ctx.fillText("Goal", Goal.x - 15, Goal.y - 15);
+
+                let totalDist = dist(Start, wp1) + dist(wp1, wp2) + dist(wp2, Goal);
+                data.innerText = `Total Path Length: ${totalDist.toFixed(1)} px`;
+            }
+
+            // Mouse Events
+            function getMousePos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                let clientX = e.clientX;
+                let clientY = e.clientY;
+                if(e.touches && e.touches.length > 0) {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                }
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function onDown(e) {
+                e.preventDefault();
+                let m = getMousePos(e);
+                if(dist(m, wp1) < 20) dragging = 1;
+                else if(dist(m, wp2) < 20) dragging = 2;
+            }
+
+            function onMove(e) {
+                if(!dragging) return;
+                e.preventDefault();
+                let m = getMousePos(e);
+                if(dragging === 1) wp1 = clamp(m, o1);
+                if(dragging === 2) wp2 = clamp(m, o2);
+                update();
+            }
+
+            function onUp() { dragging = null; }
+
+            canvas.addEventListener('mousedown', onDown);
+            canvas.addEventListener('mousemove', onMove);
+            window.addEventListener('mouseup', onUp);
+            canvas.addEventListener('touchstart', onDown, {passive: false});
+            canvas.addEventListener('touchmove', onMove, {passive: false});
+            window.addEventListener('touchend', onUp);
+
+            // Optimization Logic (Coordinate Descent to simulate SOCP)
+            btn.onclick = () => {
+                let iter = 0;
+                function step() {
+                    if(iter++ > 50) return;
+                    // Relax WP1 towards center of Start and WP2
+                    let target1 = {x: (Start.x + wp2.x)/2, y: (Start.y + wp2.y)/2};
+                    wp1 = clamp(target1, o1);
+                    // Relax WP2 towards center of WP1 and Goal
+                    let target2 = {x: (wp1.x + Goal.x)/2, y: (wp1.y + Goal.y)/2};
+                    wp2 = clamp(target2, o2);
+                    
+                    update();
+                    requestAnimationFrame(step);
+                }
+                step();
+            };
+
+            update();
+        })();
+    </script>
+</body>
+</html>

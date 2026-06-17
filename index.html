@@ -5,15 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mohsen Ghasemi | Portfolio</title>
 
-    <!-- SEO & Social sharing meta tags -->
     <meta name="description" content="Portfolio of Mohsen Ghasemi — Mechanical Engineer specialising in robotics, control systems, and AI-driven motion.">
     <meta property="og:title" content="Mohsen Ghasemi | Mechanical Engineer">
     <meta property="og:description" content="Projects spanning quadruped locomotion, soft actuators, autonomous navigation, and more.">
     <meta property="og:type" content="website">
-    <!-- Replace with a real preview image path when available -->
     <meta property="og:image" content="assets/Images/Siteimages/1401-06-28 18.22.36.jpg">
 
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -329,22 +326,45 @@
         .media-single2 { grid-template-columns: 1fr; grid-template-rows: 420px; }
         .media-single3 { grid-template-columns: 1fr; grid-template-rows: 240px; }
 
+        /* Updated Scroller CSS */
         .media-scroller {
             display: flex;
             overflow-x: auto;
             scroll-snap-type: x mandatory;
             scroll-behavior: smooth;
             height: 420px;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE and Edge */
+            cursor: grab; 
         }
-        .media-scroller::-webkit-scrollbar { height: 6px; }
-        .media-scroller::-webkit-scrollbar-track { background: #1a1a1a; }
-        .media-scroller::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
-        .media-scroller::-webkit-scrollbar-thumb:hover { background: #666; }
+        .media-scroller::-webkit-scrollbar { 
+            display: none; 
+        }
+        .media-scroller:active {
+            cursor: grabbing;
+        }
         .media-scroller .img-wrapper {
             flex: 0 0 100%;
             min-width: 100%;
             scroll-snap-align: start;
             scroll-snap-stop: always;
+        }
+
+        /* Contain logic for scroller specifically */
+        .card-media.media-scroller img {
+            object-fit: contain; 
+            background-color: #0a0a0a; 
+        }
+
+        .media-natural {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            background-color: transparent; 
+        }
+        .media-natural img {
+            object-fit: contain; 
+            height: auto; 
+            max-height: 350px; 
         }
 
         .scroll-hint {
@@ -552,7 +572,6 @@
         }
     </style>
 
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2DJ5CEZ9NJ"></script>
     <script>
     window.dataLayer = window.dataLayer || [];
@@ -563,12 +582,10 @@
 </head>
 <body>
 
-    <!-- ── Navigation ───────────────────────────────────────────── -->
     <nav>
       <div class="nav-inner">
         <div class="logo">Portfolio</div>
 
-        <!-- Desktop links -->
         <div class="nav-links">
             <a href="#projects">Projects</a>
             <a href="#thesis">Thesis</a>
@@ -589,14 +606,12 @@
             </a>
         </div>
 
-        <!-- Mobile hamburger -->
         <button class="hamburger" id="hamburger" aria-label="Toggle menu">
             <span></span><span></span><span></span>
         </button>
       </div>
     </nav>
 
-    <!-- Mobile drawer -->
     <div class="mobile-menu" id="mobileMenu">
         <a href="#projects" class="mobile-link">Projects</a>
         <a href="#thesis" class="mobile-link">Thesis</a>
@@ -617,7 +632,6 @@
         </a>
     </div>
 
-    <!-- ── Hero ──────────────────────────────────────────────────── -->
     <header class="hero" id="about">
         <div class="hero-text">
             <h1>Hi, I'm Mohsen. <br><span class="text-gradient">I am a Mechanical Engineer.</span></h1>
@@ -635,7 +649,6 @@
         </div>
     </header>
 
-    <!-- ── Skills Section ────────────────────────────────────────── -->
     <section class="skills-section" id="skills">
         <h2 class="section-title">Skills & Tools</h2>
         <div class="skills-grid">
@@ -676,13 +689,11 @@
         </div>
     </section>
 
-    <!-- ── Projects Section ───────────────────────────────────────── -->
     <section class="projects-section" id="projects">
         <h2 class="section-title">Projects</h2>
         
         <div class="grid">
 
-            <!-- PROJECT 1: Quadruped -->
             <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
@@ -712,7 +723,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 2: F1 Regulation Volumes -->
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
@@ -741,7 +751,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 3: SCARA Robot Kinematics -->
             <div class="card reveal">
                 <div class="card-media media-scroller">
                     <div class="img-wrapper">
@@ -770,7 +779,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 4: Soft Actuator -->
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
@@ -788,7 +796,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 5: Advanced Control — fixed tags -->
             <div class="card reveal">
                 <div class="card-media media-collage">
                     <div class="img-wrapper">
@@ -823,7 +830,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 6: CLIPort / LLM -->
             <div class="card reveal reveal-delay-1">
                 <div class="card-media media-single2">
                     <div class="img-wrapper">
@@ -853,7 +859,6 @@
                 </div>
             </div>
 
-            <!-- PROJECT 7: Autonomous Navigation -->
             <div class="card reveal">
                 <div class="card-media media-single">
                     <div class="img-wrapper">
@@ -882,7 +887,6 @@
             </div>
 
 
-            <!-- PROJECT 8: OMA -->
             <div class="card reveal">
                 <div class="card-media media-scroller">
                     <div class="img-wrapper">
@@ -915,10 +919,35 @@
                 </div>
             </div>
 
+
+
+            <div class="card reveal">
+                <div class="card-media media-natural">
+                    <div class="img-wrapper">
+                        <img src="assets/blog/gcs/gcs_planner_output.png" alt="Graph of Convex Sets path planning output">
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Graph of Convex Sets Path Planning</h3>
+                    <p class="card-desc">Replicated the Graph of Convex Sets (GCS) path planning algorithm </p>
+                    <div class="card-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Convex Optimization</span>
+
+                    </div>
+                    <div class="card-actions">
+                        
+                        <a href="gcs_post.html" class="action-btn primary">
+                            Blog Post
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
-    <!-- ── Thesis Section ────────────────────────────────────────── -->
     <section class="projects-section" id="thesis">
         <h2 class="section-title">M.Sc Thesis</h2>
         <div class="card reveal thesis-card">
@@ -933,7 +962,6 @@
                     <span class="tag">Signal Processing</span>
                 </div>
             </div>
-            <!-- Video Grid -->
             <div class="card-media" style="display: grid; gap: 2px; background-color: #0a0a0a; padding: 2px;">
                 <div class="img-wrapper" style="position: relative; padding-top: 56.25%;">
                     <video src="assets/Images/Thesis/1.mp4" controls playsinline style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"></video>
@@ -945,7 +973,6 @@
         </div>
     </section>
 
-    <!-- ── Contact Section ───────────────────────────────────────── -->
     <section class="contact-section" id="contact">
         <div class="contact-box reveal">
             <h2>Let's work together</h2>
@@ -967,18 +994,15 @@
         </div>
     </section>
 
-    <!-- ── Lightbox Modal ────────────────────────────────────────── -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close">&times;</span>
         <img class="lightbox-content" id="lightbox-img" alt="Fullscreen Image">
     </div>
 
-    <!-- ── Footer ────────────────────────────────────────────────── -->
     <footer>
         <p>&copy; 2026 Mohsen Ghasemi. All rights reserved.</p>
     </footer>
 
-    <!-- ── JavaScript ─────────────────────────────────────────────── -->
     <script>
         // Hamburger menu
         const hamburger = document.getElementById('hamburger');
@@ -1030,6 +1054,43 @@
                 // Clear the src after transition so it doesn't flash the old image next time
                 setTimeout(() => { lightboxImg.src = ''; }, 300); 
             }
+        });
+
+        // ── Scroller Drag-to-Scroll Logic ──────────────────────────────
+        const scrollers = document.querySelectorAll('.media-scroller');
+
+        scrollers.forEach(slider => {
+            let isDown = false;
+            let startX;
+            let scrollLeft;
+
+            slider.addEventListener('mousedown', (e) => {
+                isDown = true;
+                startX = e.pageX - slider.offsetLeft;
+                scrollLeft = slider.scrollLeft;
+                // Temporarily turn off snap so the drag feels smooth
+                slider.style.scrollSnapType = 'none'; 
+            });
+
+            slider.addEventListener('mouseleave', () => {
+                isDown = false;
+                // Turn snap back on when mouse leaves
+                slider.style.scrollSnapType = 'x mandatory'; 
+            });
+
+            slider.addEventListener('mouseup', () => {
+                isDown = false;
+                // Turn snap back on when dragging finishes
+                slider.style.scrollSnapType = 'x mandatory'; 
+            });
+
+            slider.addEventListener('mousemove', (e) => {
+                if (!isDown) return; // Stop the fn from running if not clicked
+                e.preventDefault();
+                const x = e.pageX - slider.offsetLeft;
+                const walk = (x - startX) * 1.5; // Multiplier adjusts drag speed
+                slider.scrollLeft = scrollLeft - walk;
+            });
         });
     </script>
 
